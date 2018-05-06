@@ -29,7 +29,8 @@
           <td>{{ props.item.title }}</td>
           <td>{{ props.item.store_related_category.title }}</td>
           <td>{{ props.item.store_related_user.first_name }} {{ props.item.store_related_user.last_name }}</td>
-          <td>{{ props.item.store_related_owner.first_name }} {{ props.item.store_related_owner.last_name }}</td>
+          <td v-if="props.item.store_related_owner">{{ props.item.store_related_owner.first_name }} {{ props.item.store_related_owner.last_name }}</td>
+          <td v-else>-</td>
           <td>
             <v-btn v-if="props.item.active_flag == true" flat small color="success" v-on:click="deactivate(props.item.id)">Active</v-btn>
             <v-btn v-else flat small color="error" v-on:click="activate(props.item.id)">Deactive</v-btn>
@@ -68,6 +69,7 @@
           { text: 'Category', value: 'store_related_category', align: 'left' },
           { text: 'Created User', value: 'store_related_user', align: 'left' },
           { text: 'Owner', value: 'store_related_owner', align: 'left' },
+          { text: '' },
           { text: '' }
         ],
         dialog: false,

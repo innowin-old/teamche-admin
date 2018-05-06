@@ -6,6 +6,7 @@ import Stores from '@/components/Stores'
 import Products from '@/components/Products'
 import Posts from '@/components/Posts'
 import UpgradeRequests from '@/components/UpgradeRequests'
+import UserForm from '@/components/UserForm'
 
 Vue.use(Router)
 
@@ -40,6 +41,16 @@ export default new Router({
       path: '/upgrade-requests',
       name: 'Upgrade Requests',
       component: UpgradeRequests
+    },
+    {
+      path: '/new-user',
+      name: 'New User',
+      component: UserForm
+    },
+    {
+      path: '/update-user',
+      name: 'Update User',
+      component: UserForm
     }
   ]
 })

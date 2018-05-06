@@ -64,6 +64,7 @@
           { text: 'First Name', value: 'first_name', align: 'left' },
           { text: 'Last Name', value: 'last_name', align: 'left' },
           { text: 'Email', value: 'email', align: 'left' },
+          { text: '' }
         ],
         dialog: false,
         notifications: false,
