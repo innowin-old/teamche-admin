@@ -10,7 +10,7 @@
       app
     >
       <div style="text-align: center">
-        <img src="@/assets/logo.svg" class="logo" />
+        <img src="@/assets/logo.jpg" class="logo" />
       </div>
       <v-list>
         <v-list-tile
