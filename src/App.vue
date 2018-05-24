@@ -13,18 +13,27 @@
         <img src="@/assets/logo.jpg" class="logo" />
       </div>
       <v-list>
-        <v-list-tile
-          value="true"
-          v-for="(item, i) in items"
-          :key="i"
+        <v-list-group
+          v-for="item in items"
+          v-model="item.active"
+          :key="item.title"
+          :prepend-icon="item.icon"
+          no-action
         >
-          <v-list-tile-action>
-            <v-icon v-html="item.icon"></v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content @click="navigate(item.path)">
-            <v-list-tile-title v-text="item.title"></v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+          <v-list-tile slot="activator">
+            <v-list-tile-content>
+              <v-list-tile-title @click="navigate(item.path)">{{ item.title }}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-list-tile v-for="subItem in item.items" :key="subItem.title" @click="">
+            <v-list-tile-content>
+              <v-list-tile-title @click="navigate(subItem.path)">{{ subItem.title }}</v-list-tile-title>
+            </v-list-tile-content>
+            <v-list-tile-action>
+              <v-icon>{{ subItem.action }}</v-icon>
+            </v-list-tile-action>
+          </v-list-tile>
+        </v-list-group>
       </v-list>
     </v-navigation-drawer>
     <v-toolbar
@@ -100,11 +109,31 @@ export default {
         icon: 'business',
         title: 'Stores',
         path: '/stores',
+        items: [
+          {
+            title: 'Owner Confirmation',
+            path: '/owner-request-confirmation'
+          },
+          {
+            title: 'Offer Confirmation',
+            path: '/offer-request-confirmation'
+          }
+        ]
       },
       {
         icon: 'devices',
         title: 'Products',
-        path: '/products'
+        path: '/products',
+        items: [
+          {
+            title: 'Create Request Confirmation',
+            path: '/products/create-request-confirmation'
+          },
+          {
+            title: 'Update Request Confirmation',
+            path: '/products/update-request-confirmation'
+          }
+        ]
       },
       {
         icon: 'list',

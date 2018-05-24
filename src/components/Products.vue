@@ -28,8 +28,8 @@
           <td>{{ props.item.id }}</td>
           <td>{{ props.item.title }}</td>
           <td>{{ props.item.brand }}</td>
-          <td>{{ props.item.product_related_store }}</td>
-          <td>{{ props.item.product_related_category }}</td>
+          <td>{{ props.item.product_related_store.title }}</td>
+          <td>{{ props.item.product_related_category.title }}</td>
           <td>
             <v-btn flat icon color="orange" class="tools-button" v-on:click="editRecord(props.item.id)">
               <v-icon>edit</v-icon>

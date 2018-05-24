@@ -3,9 +3,6 @@
     <v-container>
       <v-card-title>
         <div class="buttons">
-          <v-btn color="success" dark v-on:click="navigate('Import-Stores')">Import</v-btn>
-          <v-btn color="pink" dark>Export</v-btn>
-          <v-btn color="cyan" dark v-on:click="navigate('New-Store')">New Store</v-btn>
         </div>
         <v-spacer></v-spacer>
         <v-text-field
@@ -27,10 +24,9 @@
         <template slot="items" slot-scope="props">
           <td>{{ props.item.id }}</td>
           <td>{{ props.item.title }}</td>
-          <td>{{ props.item.store_related_category.title }}</td>
-          <td>{{ props.item.store_related_user.first_name }} {{ props.item.store_related_user.last_name }}</td>
-          <td v-if="props.item.store_related_owner">{{ props.item.store_related_owner.first_name }} {{ props.item.store_related_owner.last_name }}</td>
-          <td v-else>-</td>
+          <td>{{ props.item.brand }}</td>
+          <td>{{ props.item.product_related_store.title }}</td>
+          <td>{{ props.item.product_related_category.title }}</td>
           <td>
             <v-btn v-if="props.item.active_flag == true" flat small color="success" v-on:click="deactivate(props.item.id)">Active</v-btn>
             <v-btn v-else flat small color="error" v-on:click="activate(props.item.id)">Deactive</v-btn>
@@ -57,7 +53,7 @@
     data: function () {
       return {
         items: [],
-        title: 'Stores',
+        title: 'Products',
         search: '',
         pagination: {
           rowsPerPage: 10
@@ -66,9 +62,9 @@
         headers: [
           { text: 'ID', value: 'id', align: 'left' },
           { text: 'Title', value: 'title', align: 'left' },
-          { text: 'Category', value: 'store_related_category', align: 'left' },
-          { text: 'Created User', value: 'store_related_user', align: 'left' },
-          { text: 'Owner', value: 'store_related_owner', align: 'left' },
+          { text: 'Brand', value: 'brand', align: 'left' },
+          { text: 'Related Store', value: 'product_related_store', align: 'left' },
+          { text: 'Related Category', value: 'product_related_category', align: 'left' },
           { text: '' },
           { text: '' }
         ],
@@ -116,7 +112,7 @@
     created: function() {
       this.$store.dispatch('setTitle', this.title)
       var body = {
-        url: 'http://teamche.daneshboom.ir/stores/',
+        url: 'http://teamche.daneshboom.ir/products/',
         token: this.$cookie.get('teamche_token'),
         method: 'get',
         result: 'storesResult'
@@ -132,7 +128,7 @@
           active_flag: true
         }
         var body = {
-          url: 'http://teamche.daneshboom.ir/stores/' + id + '/',
+          url: 'http://teamche.daneshboom.ir/products/' + id + '/',
           token: this.$cookie.get('teamche_token'),
           method: 'patch',
           result: 'activateResult',
@@ -145,7 +141,7 @@
           active_flag: false
         }
         var body = {
-          url: 'http://teamche.daneshboom.ir/stores/' + id + '/',
+          url: 'http://teamche.daneshboom.ir/products/' + id + '/',
           token: this.$cookie.get('teamche_token'),
           method: 'patch',
           result: 'deactivateResult',
@@ -166,7 +162,7 @@
         }).then((result) => {
           if (result.value) {
             var body = {
-              url: "http://teamche.daneshboom.ir/stores/" + id + "/",
+              url: "http://teamche.daneshboom.ir/products/" + id + "/",
               method: 'del',
               token: this.$cookie.get('teamche_token'),
               result: 'categoryDeleteResult',
