@@ -3,8 +3,6 @@
     <v-container>
       <v-card-title>
         <div class="buttons">
-          <v-btn color="success" dark v-on:click="navigate('Import-Users')">Import</v-btn>
-          <v-btn color="pink" dark>Export</v-btn>
           <v-btn color="cyan" dark v-on:click="navigate('New-User')">New User</v-btn>
         </div>
         <v-spacer></v-spacer>
@@ -23,6 +21,7 @@
         v-bind:pagination.sync="pagination"
         hide-actions
         class="elevation-1"
+        v-bind:loading="loading"
       >
         <template slot="items" slot-scope="props">
           <td>{{ props.item.id }}</td>
@@ -31,7 +30,7 @@
           <td>{{ props.item.last_name }}</td>
           <td>{{ props.item.email }}</td>
           <td>
-            <v-btn flat icon color="orange" class="tools-button" v-on:click="editRecord(props.item.id)">
+            <v-btn flat icon color="orange" class="tools-button" v-on:click="navigate('update-user?id=' + props.item.id)">
               <v-icon>edit</v-icon>
             </v-btn>
             <v-btn flat icon color="red" dark class="tools-button" v-on:click="deleteRecord(props.item.id, props.index)">
@@ -69,7 +68,8 @@
         dialog: false,
         notifications: false,
         sound: true,
-        widgets: false
+        widgets: false,
+        loading: true
       }
     },
     computed: {
@@ -83,7 +83,8 @@
     },
     sockets: {
       usersResult: function(val) {
-        this.items = val
+        this.items = val;
+        this.loading = false;
       }
     },
     created: function() {

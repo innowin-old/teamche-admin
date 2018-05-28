@@ -3,7 +3,9 @@
     <v-container>
       <v-card-title>
         <div class="buttons">
-          <v-btn color="cyan" dark v-on:click="navigate('New-Store')">New Store</v-btn>
+          <v-btn color="success" dark v-on:click="navigate('Import-Upgrade-Requests')">Import</v-btn>
+          <v-btn color="pink" dark>Export</v-btn>
+          <v-btn color="cyan" dark v-on:click="navigate('New-Upgrade-Request')">New Upgrade Request</v-btn>
         </div>
         <v-spacer></v-spacer>
         <v-text-field
@@ -25,21 +27,17 @@
       >
         <template slot="items" slot-scope="props">
           <td>{{ props.item.id }}</td>
-          <td>{{ props.item.title }}</td>
-          <td>{{ props.item.store_related_category.title }}</td>
-          <td>{{ props.item.store_related_user.first_name }} {{ props.item.store_related_user.last_name }}</td>
-          <td v-if="props.item.store_related_owner">{{ props.item.store_related_owner.first_name }} {{ props.item.store_related_owner.last_name }}</td>
-          <td v-else>-</td>
+          <td>{{ props.item.upgrade_request_related_user }}</td>
+          <td>{{ props.item.first_name }}</td>
+          <td>{{ props.item.last_name }}</td>
+          <td>{{ props.item.gender }}</td>
+          <td>{{ props.item.type }}</td>
           <td>
-            <v-btn v-if="props.item.active_flag == true" flat small color="success" v-on:click="deactivate(props.item.id)">Active</v-btn>
-            <v-btn v-else flat small color="error" v-on:click="activate(props.item.id)">Deactive</v-btn>
-          </td>
-          <td>
-            <v-btn flat icon color="orange" class="tools-button" v-on:click="navigate('/update-store?id=' + props.item.id)">
-              <v-icon>edit</v-icon>
+            <v-btn flat icon color="green" class="tools-button" v-on:click="activate(props.item.id)">
+              <v-icon>done</v-icon>
             </v-btn>
             <v-btn flat icon color="red" dark class="tools-button" v-on:click="deleteRecord(props.item.id, props.index)">
-              <v-icon>delete</v-icon>
+              <v-icon>close</v-icon>
             </v-btn>
           </td>
         </template>
@@ -56,7 +54,7 @@
     data: function () {
       return {
         items: [],
-        title: 'Stores',
+        title: 'Upgrade Requests',
         search: '',
         pagination: {
           rowsPerPage: 10
@@ -64,11 +62,11 @@
         selected: [],
         headers: [
           { text: 'ID', value: 'id', align: 'left' },
-          { text: 'Title', value: 'title', align: 'left' },
-          { text: 'Category', value: 'store_related_category', align: 'left' },
-          { text: 'Created User', value: 'store_related_user', align: 'left' },
-          { text: 'Owner', value: 'store_related_owner', align: 'left' },
-          { text: '' },
+          { text: 'Related User', value: 'upgrade_request_related_user', align: 'left' },
+          { text: 'First Name', value: 'first_name', align: 'left' },
+          { text: 'Last Name', value: 'last_name', align: 'left' },
+          { text: 'Gender', value: 'gender', align: 'left' },
+          { text: 'Upgrade Type', value: 'type', align: 'left' },
           { text: '' }
         ],
         dialog: false,
@@ -88,38 +86,31 @@
       }
     },
     sockets: {
-      storesResult: function(val) {
-        this.items = val;
-        this.loading = false;
+      usersResult: function(val) {
+        this.items = val
+        this.loading = false
       },
       activateResult: function(val) {
         console.log(val)
         if ('id' in val){
-          for(var i = 0; i < this.items.length; i++){
+          for (var i = 0; i < this.items.length; i++){
             if (this.items[i].id == val.id){
-              this.items[i].active_flag  = true;
+              this.items.splice(i, 1)
             }
           }
         }
       },
       deactivateResult: function(val) {
         console.log(val)
-        if ('id' in val){
-          for(var i = 0; i < this.items.length; i++){
-            if (this.items[i].id == val.id){
-              this.items[i].active_flag = false;
-            }
-          }
-        }
       }
     },
     created: function() {
       this.$store.dispatch('setTitle', this.title)
       var body = {
-        url: 'http://teamche.daneshboom.ir/stores/owner_confirmation/',
+        url: 'http://teamche.daneshboom.ir/users/upgrade-requests/?format=json',
         token: this.$cookie.get('teamche_token'),
         method: 'get',
-        result: 'storesResult'
+        result: 'usersResult'
       }
       this.$socket.emit('rest request', body)
     },
@@ -132,7 +123,7 @@
           active_flag: true
         }
         var body = {
-          url: 'http://teamche.daneshboom.ir/stores/' + id + '/',
+          url: 'http://teamche.daneshboom.ir/users/upgrade-requests/' + id + '/',
           token: this.$cookie.get('teamche_token'),
           method: 'patch',
           result: 'activateResult',
@@ -145,7 +136,7 @@
           active_flag: false
         }
         var body = {
-          url: 'http://teamche.daneshboom.ir/stores/' + id + '/',
+          url: 'http://teamche.daneshboom.ir/users/upgrade-requests/' + id + '/',
           token: this.$cookie.get('teamche_token'),
           method: 'patch',
           result: 'deactivateResult',
@@ -166,7 +157,7 @@
         }).then((result) => {
           if (result.value) {
             var body = {
-              url: "http://teamche.daneshboom.ir/stores/" + id + "/",
+              url: "http://teamche.daneshboom.ir/users/upgrade-requests/" + id + "/",
               method: 'del',
               token: this.$cookie.get('teamche_token'),
               result: 'categoryDeleteResult',

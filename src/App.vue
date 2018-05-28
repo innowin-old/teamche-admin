@@ -104,6 +104,12 @@ export default {
         icon: 'person',
         title: 'Users',
         path: '/users',
+        items: [
+          {
+            title: 'Upgrade Requests',
+            path: '/upgrade-requests'
+          }
+        ]
       },
       {
         icon: 'business',
@@ -117,6 +123,10 @@ export default {
           {
             title: 'Offer Confirmation',
             path: '/offer-request-confirmation'
+          },
+          {
+            title: 'Update Confirmation',
+            path: '/stores/update-request-confirmation'
           }
         ]
       },
@@ -126,11 +136,11 @@ export default {
         path: '/products',
         items: [
           {
-            title: 'Create Request Confirmation',
+            title: 'Create Confirmation',
             path: '/products/create-request-confirmation'
           },
           {
-            title: 'Update Request Confirmation',
+            title: 'Update Confirmation',
             path: '/products/update-request-confirmation'
           }
         ]
@@ -138,12 +148,17 @@ export default {
       {
         icon: 'list',
         title: 'Posts',
-        path: '/posts'
-      },
-      {
-        icon: 'copyright',
-        title: 'Upgrade Requests',
-        path: 'upgrade-requests'
+        path: '/posts',
+        items: [
+          {
+            title: 'Create Confirmation',
+            path: '/posts/create-request-confirmation'
+          },
+          {
+            title: 'Update Confirmation',
+            path: '/posts/update-request-confirmation'
+          }
+        ]
       }
       ],
       miniVariant: false,

@@ -23,6 +23,7 @@
         v-bind:pagination.sync="pagination"
         hide-actions
         class="elevation-1"
+        v-bind:loading="loading"
       >
         <template slot="items" slot-scope="props">
           <td>{{ props.item.id }}</td>
@@ -69,7 +70,8 @@
         dialog: false,
         notifications: false,
         sound: true,
-        widgets: false
+        widgets: false,
+        loading: true
       }
     },
     computed: {
@@ -83,7 +85,8 @@
     },
     sockets: {
       productsResult: function(val) {
-        this.items = val
+        this.items = val;
+        this.loading = false;
       }
     },
     created: function() {
