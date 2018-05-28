@@ -3,7 +3,7 @@
     <v-container>
       <v-card-title>
         <div class="buttons">
-          <v-btn color="cyan" dark v-on:click="navigate('New-Post')">New Post</v-btn>
+          <v-btn color="cyan" dark v-on:click="navigate('/posts/create')">New Post</v-btn>
         </div>
         <v-spacer></v-spacer>
         <v-text-field
@@ -28,7 +28,7 @@
           <td>{{ props.item.title }}</td>
           <td>{{ props.item.text }}</td>
           <td>
-            <v-btn flat icon color="orange" class="tools-button" v-on:click="editRecord(props.item.id)">
+            <v-btn flat icon color="orange" class="tools-button" v-on:click="navigate('/posts?id=' + props.item.id)">
               <v-icon>edit</v-icon>
             </v-btn>
             <v-btn flat icon color="red" dark class="tools-button" v-on:click="deleteRecord(props.item.id, props.index)">

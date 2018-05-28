@@ -8,14 +8,44 @@
       v-model="title"
       :rules="titleRules"
       :counter="100"
+      v-bind:loading="loading"
       required
     ></v-text-field>
-    
+
+    <v-text-field
+      label="Description"
+      v-model="description"
+      :rules="descriptionRules"
+      :counter="100"
+      v-bind:loading="loading"
+      required
+    ></v-text-field>
+
+    <v-text-field
+      label="Brand"
+      v-model="brand"
+      :rules="brandRules"
+      :counter="20"
+      v-bind:loading="loading"
+      required
+    ></v-text-field>
+
     <v-select
-      label="Related User"
-      v-model="relatedUser"
-      :items="relatedUserItems"
-      :rules="[v => !!v || 'User is required']"
+      label="Related Store"
+      v-model="relatedStore"
+      :items="relatedStoreItems"
+      :rules="[v => !!v || 'Store is required']"
+      v-bind:loading="loading"
+      required
+      autocomplete
+    ></v-select>
+
+    <v-select
+      label="Related Category"
+      v-model="relatedCategory"
+      :items="relatedCategoryItems"
+      :rules="[v => !!v || 'Category is required']"
+      v-bind:loading="loading"
       required
       autocomplete
     ></v-select>
@@ -37,48 +67,73 @@
   export default {
     data: () => ({
       id: null,
-      title: 'User Badge',
+      title: 'Products',
       valid: true,
+      loading: true,
       title: '',
       titleRules: [
         (v) => !!v || 'Title is required',
-        (v) => v && v.length <= 100 || 'Title  must be less than 100 characters'
+        (v) => v && v.length <= 100 || 'Title must be less than 100 characters'
       ],
-      relatedUser: null,
-      relatedUserItems: [],
-      users: []
+      description: '',
+      descriptionRules: [
+        (v) => v && v.length <= 100 || 'Description must be less than 100 characters'
+      ],
+      brand: '',
+      brandRules: [
+        (v) => !!v || 'Brand is required',
+        (v) => v && v.length <= 20 || 'Brand must be less than 20 characters'
+      ],
+      relatedStore: null,
+      relatedStoreItems: [],
+      stores: [],
+      relatedCategory: null,
+      relatedCategoryItems: [],
+      categories: []
     }),
     methods: {
       submit () {
         if (this.$refs.form.validate()) {
+
+          var store_value = 0
+          for(var i = 0; i < this.stores.length; i++){
+            if(this.stores[i].title == this.relatedStore){
+              store_value = this.stores[i].id
+              break
+            }
+          }
+
           // Native form submission is not yet supported
-          var user_value = 0
-          for(var i = 0; i < this.users.length; i++){
-            if(this.users[i].username == this.relatedUser){
-              user_value = this.users[i].id
+          var category_value = 0
+          for(var i = 0; i < this.categories.length; i++){
+            if(this.categories[i].title == this.relatedCategory){
+              category_value = this.categories[i].id
               break
             }
           }
 
           var data = {
             title: this.title,
-            badge_user: user_value
+            description: this.description,
+            brand: this.brand,
+            product_related_store: store_value,
+            product_related_category: category_value
           }
 
           if (this.id != null) {
             var body = {
-              token: this.$cookie.get('daneshboom_token'),
-              url: 'http://restful.daneshboom.ir/users/badges/' + this.id + '/',
+              token: this.$cookie.get('teamche_token'),
+              url: 'http://teamche.daneshboom.ir/products/' + this.id + '/',
               method: 'patch',
-              result: 'newUserBadgeProcess',
+              result: 'newProductProcess',
               data: data
             }
           } else {
             var body = {
-              token: this.$cookie.get('daneshboom_token'),
-              url: 'http://restful.daneshboom.ir/users/badges/',
+              token: this.$cookie.get('teamche_token'),
+              url: 'http://teamche.daneshboom.ir/products/',
               method: 'post',
-              result: 'newUserBadgeProcess',
+              result: 'newProductProcess',
               data: data
             }
           }
@@ -100,26 +155,44 @@
       }
     },
     sockets: {
-      newUserBadgeResult: function(value) {
-        this.users = value
-        for(var i = 0; i < this.users.length; i++){
-          this.relatedUserItems.push(this.users[i].username)
+      newProductResult: function(value) {
+        this.stores = value
+        for(var i = 0; i < this.stores.length; i++){
+          this.relatedStoreItems.push(this.stores[i].title)
         }
-        console.log(this.relatedUserItems)
+        console.log(this.relatedStoreItems)
+
+        var body = {
+          url: 'http://teamche.daneshboom.ir/products/categories/?format=json',
+          token: this.$cookie.get('teamche_token'),
+          method: 'get',
+          result: 'getCategoriesResult'
+        }
+        this.$socket.emit('rest request', body);
+
+      },
+      getCategoriesResult: function(value) {
+        this.categories = value;
+        for(var i = 0; i < this.categories.length; i++){
+          this.relatedCategoryItems.push(this.categories[i].title)
+        }
+        console.log(this.relatedCategories);
 
         if (this.getParameterByName('id') != null) {
           this.id = this.getParameterByName('id');
           var updateBody = {
-            url: 'http://restful.daneshboom.ir/users/badges/' + this.id + '/?format=json',
-            token: this.$cookie.get('daneshboom_token'),
+            url: 'http://teamche.daneshboom.ir/products/' + this.id + '/?format=json',
+            token: this.$cookie.get('teamche_token'),
             method: 'get',
-            result: 'getUserBadgeResult'
+            result: 'getProductResult'
           }
           this.$socket.emit('rest request', updateBody)
+        } else {
+          this.loading = false;
         }
-        console.log(this.getParameterByName('id'));        
+        console.log(this.getParameterByName('id'));
       },
-      newUserBadgeProcess: function(value) {
+      newProductProcess: function(value) {
         console.log(value)
         if ('id' in value){
           if (this.id != null) {
@@ -132,7 +205,7 @@
             title: 'Successfully',
             text: text_value
           }).then((result) => {
-            this.$router.push('/user-badges');
+            this.$router.push('/products');
           });
         } else {
           this.$swal({
@@ -142,36 +215,34 @@
           });
         }
       },
-      getUserBadgeResult: function(value) {
+      getProductResult: function(value) {
         console.log(value);
         this.title = value.title
-        for (var i = 0; i < this.users.length; i++) {
-          if (this.users[i].id == value.badge_user)
-            this.relatedUser = this.users[i].username
+        this.description = value.description
+        this.brand = value.brand
+
+        for (var i = 0; i < this.stores.length; i++) {
+          if (this.stores[i].id == value.product_related_store.id)
+            this.relatedStore = this.stores[i].title
         }
+
+        for (var j = 0; j < this.categories.length; j++) {
+          if (this.categories[j].id == value.product_related_category.id)
+            this.relatedCategory = this.categories[j].title
+        }
+
+        this.loading = false;
       }
     },
     created: function() {
       this.$store.dispatch('setTitle', this.title)
       var body = {
-        url: 'http://restful.daneshboom.ir/users/?format=json',
-        token: this.$cookie.get('daneshboom_token'),
+        url: 'http://teamche.daneshboom.ir/stores/?format=json',
+        token: this.$cookie.get('teamche_token'),
         method: 'get',
-        result: 'newUserBadgeResult'
+        result: 'newProductResult'
       }
-      this.$socket.emit('rest request', body)
-
-      /*if (this.getParameterByName('id') != null) {
-        this.id = this.getParameterByName('id');
-        var updateBody = {
-          url: 'http://restful.daneshboom.ir/organizations/abilities/' + this.id + '/?format=json',
-          token: this.$cookie.get('daneshboom_token'),
-          method: 'get',
-          result: 'getOrganizationAbilityResult'
-        }
-        this.$socket.emit('rest request', updateBody)
-      }
-      console.log(this.getParameterByName('id'));*/
+      this.$socket.emit('rest request', body);
     }
   }
 </script>

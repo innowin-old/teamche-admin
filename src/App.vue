@@ -142,6 +142,10 @@ export default {
           {
             title: 'Update Confirmation',
             path: '/products/update-request-confirmation'
+          },
+          {
+            title: 'Categories List',
+            path: '/products/categories'
           }
         ]
       },

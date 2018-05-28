@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 
-import Users from '@/components/Users'
+import Users from '@/components/users/List'
 import UserForm from '@/components/users/Form'
 
 import Stores from '@/components/stores/List'
@@ -11,13 +11,18 @@ import OfferConfirmation from '@/components/stores/OfferRequestConfirmation'
 import StoreUpdateRequestConfirmation from '@/components/stores/UpdateRequestConfirmation'
 import StoreForm from '@/components/stores/Form'
 
-import Products from '@/components/Products'
+import Products from '@/components/products/List'
 import ProductCreateRequestConfirmation from '@/components/products/CreateRequestConfirmation'
 import ProductUpdateRequestConfirmation from '@/components/products/UpdateRequestConfirmation'
+import ProductForm from '@/components/products/Form'
 
-import Posts from '@/components/Posts'
+import ProductCategories from '@/components/products/CategoriesList'
+import ProductCategoryForm from '@/components/products/CategoryForm'
+
+import Posts from '@/components/posts/List'
 import PostCreateRequestConfirmation from '@/components/posts/CreateRequestConfirmation'
 import PostUpdateRequestConfirmation from '@/components/posts/UpdateRequestConfirmation'
+import PostForm from '@/components/posts/Form'
 
 import UpgradeRequests from '@/components/upgrade-requests/List'
 
@@ -36,12 +41,12 @@ export default new Router({
       component: Users
     },
     {
-      path: '/create-user',
+      path: '/users/create',
       name: 'Create User',
       component: UserForm
     },
     {
-      path: '/update-user',
+      path: '/users/update',
       name: 'Update User',
       component: UserForm
     },
@@ -91,6 +96,31 @@ export default new Router({
       component: ProductUpdateRequestConfirmation
     },
     {
+      path: '/products/create',
+      name: 'Product Update Form',
+      component: ProductForm
+    },
+    {
+      path: '/products/update',
+      name: 'Product Create Form',
+      component: ProductForm
+    },
+    {
+      path: '/products/categories',
+      name: 'Product Categories',
+      component: ProductCategories
+    },
+    {
+      path: '/products/categories/create',
+      name: 'Create Product Category',
+      component: ProductCategoryForm
+    },
+    {
+      path: '/products/categories/update',
+      name: 'Update Product Category',
+      component: ProductCategoryForm
+    },
+    {
       path: '/posts',
       name: 'Posts',
       component: Posts
@@ -104,6 +134,16 @@ export default new Router({
       path: '/posts/update-request-confirmation',
       name: 'Update Request Confirmation',
       component: PostUpdateRequestConfirmation
+    },
+    {
+      path: '/posts/create',
+      name: 'Post Create Form',
+      component: PostForm
+    },
+    {
+      path: '/posts/update',
+      name: 'Post Update Form',
+      component: PostForm
     },
     {
       path: '/upgrade-requests',

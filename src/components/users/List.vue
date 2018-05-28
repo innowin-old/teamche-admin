@@ -3,7 +3,7 @@
     <v-container>
       <v-card-title>
         <div class="buttons">
-          <v-btn color="cyan" dark v-on:click="navigate('New-Product')">New Product</v-btn>
+          <v-btn color="cyan" dark v-on:click="navigate('/users/create')">New User</v-btn>
         </div>
         <v-spacer></v-spacer>
         <v-text-field
@@ -25,12 +25,12 @@
       >
         <template slot="items" slot-scope="props">
           <td>{{ props.item.id }}</td>
-          <td>{{ props.item.title }}</td>
-          <td>{{ props.item.brand }}</td>
-          <td>{{ props.item.product_related_store.title }}</td>
-          <td>{{ props.item.product_related_category.title }}</td>
+          <td>{{ props.item.username }}</td>
+          <td>{{ props.item.first_name }}</td>
+          <td>{{ props.item.last_name }}</td>
+          <td>{{ props.item.email }}</td>
           <td>
-            <v-btn flat icon color="orange" class="tools-button" v-on:click="navigate('/products/update?id=' + props.item.id)">
+            <v-btn flat icon color="orange" class="tools-button" v-on:click="navigate('/users/update?id=' + props.item.id)">
               <v-icon>edit</v-icon>
             </v-btn>
             <v-btn flat icon color="red" dark class="tools-button" v-on:click="deleteRecord(props.item.id, props.index)">
@@ -51,7 +51,7 @@
     data: function () {
       return {
         items: [],
-        title: 'Products',
+        title: 'Users',
         search: '',
         pagination: {
           rowsPerPage: 10
@@ -59,10 +59,10 @@
         selected: [],
         headers: [
           { text: 'ID', value: 'id', align: 'left' },
-          { text: 'Title', value: 'title', align: 'left' },
-          { text: 'Brand', value: 'brand', align: 'left' },
-          { text: 'Related Store', value: 'product_related_store', align: 'left' },
-          { text: 'Category', value: 'product_related_category', align: 'left' },
+          { text: 'Username', value: 'username', align: 'left' },
+          { text: 'First Name', value: 'first_name', align: 'left' },
+          { text: 'Last Name', value: 'last_name', align: 'left' },
+          { text: 'Email', value: 'email', align: 'left' },
           { text: '' }
         ],
         dialog: false,
@@ -82,7 +82,7 @@
       }
     },
     sockets: {
-      productsResult: function(val) {
+      usersResult: function(val) {
         this.items = val;
         this.loading = false;
       }
@@ -90,10 +90,10 @@
     created: function() {
       this.$store.dispatch('setTitle', this.title)
       var body = {
-        url: 'http://teamche.daneshboom.ir/products/?format=json',
+        url: 'http://teamche.daneshboom.ir/users/?format=json',
         token: this.$cookie.get('teamche_token'),
         method: 'get',
-        result: 'productsResult'
+        result: 'usersResult'
       }
       this.$socket.emit('rest request', body)
     },
@@ -114,7 +114,7 @@
         }).then((result) => {
           if (result.value) {
             var body = {
-              url: "http://restful.daneshboom.ir/products/" + id + "/",
+              url: "http://restful.daneshboom.ir/users/" + id + "/",
               method: 'del',
               token: this.$cookie.get('teamche_token'),
               result: 'categoryDeleteResult',

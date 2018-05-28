@@ -11,14 +11,13 @@
       required
     ></v-text-field>
     
-    <v-select
-      label="Related User"
-      v-model="relatedUser"
-      :items="relatedUserItems"
-      :rules="[v => !!v || 'User is required']"
+    <v-text-field
+      label="Text"
+      v-model="text"
+      :rules="textRules"
+      :counter="400"
       required
-      autocomplete
-    ></v-select>
+    ></v-text-field>
 
     <v-btn
       @click="submit"
@@ -37,48 +36,42 @@
   export default {
     data: () => ({
       id: null,
-      title: 'User Badge',
+      title: 'Posts',
       valid: true,
       title: '',
       titleRules: [
         (v) => !!v || 'Title is required',
-        (v) => v && v.length <= 100 || 'Title  must be less than 100 characters'
+        (v) => v && v.length <= 100 || 'Title must be less than 100 characters'
       ],
-      relatedUser: null,
-      relatedUserItems: [],
-      users: []
+      text: '',
+      textRules: [
+        (v) => !!v || 'Text is required',
+        (v) => v && v.length <= 400 || 'Text must be less than 400 characters'
+      ],
     }),
     methods: {
       submit () {
         if (this.$refs.form.validate()) {
-          // Native form submission is not yet supported
-          var user_value = 0
-          for(var i = 0; i < this.users.length; i++){
-            if(this.users[i].username == this.relatedUser){
-              user_value = this.users[i].id
-              break
-            }
-          }
 
           var data = {
             title: this.title,
-            badge_user: user_value
+            text: this.text
           }
 
           if (this.id != null) {
             var body = {
-              token: this.$cookie.get('daneshboom_token'),
-              url: 'http://restful.daneshboom.ir/users/badges/' + this.id + '/',
+              token: this.$cookie.get('teamche_token'),
+              url: 'http://teamche.daneshboom.ir/posts/' + this.id + '/',
               method: 'patch',
-              result: 'newUserBadgeProcess',
+              result: 'newPostProcess',
               data: data
             }
           } else {
             var body = {
-              token: this.$cookie.get('daneshboom_token'),
-              url: 'http://restful.daneshboom.ir/users/badges/',
+              token: this.$cookie.get('teamche_token'),
+              url: 'http://teamche.daneshboom.ir/posts/',
               method: 'post',
-              result: 'newUserBadgeProcess',
+              result: 'newPostProcess',
               data: data
             }
           }
@@ -100,26 +93,10 @@
       }
     },
     sockets: {
-      newUserBadgeResult: function(value) {
-        this.users = value
-        for(var i = 0; i < this.users.length; i++){
-          this.relatedUserItems.push(this.users[i].username)
-        }
-        console.log(this.relatedUserItems)
+      newPostResult: function(value) {
 
-        if (this.getParameterByName('id') != null) {
-          this.id = this.getParameterByName('id');
-          var updateBody = {
-            url: 'http://restful.daneshboom.ir/users/badges/' + this.id + '/?format=json',
-            token: this.$cookie.get('daneshboom_token'),
-            method: 'get',
-            result: 'getUserBadgeResult'
-          }
-          this.$socket.emit('rest request', updateBody)
-        }
-        console.log(this.getParameterByName('id'));        
       },
-      newUserBadgeProcess: function(value) {
+      newPostProcess: function(value) {
         console.log(value)
         if ('id' in value){
           if (this.id != null) {
@@ -132,7 +109,7 @@
             title: 'Successfully',
             text: text_value
           }).then((result) => {
-            this.$router.push('/user-badges');
+            this.$router.push('/posts');
           });
         } else {
           this.$swal({
@@ -142,36 +119,26 @@
           });
         }
       },
-      getUserBadgeResult: function(value) {
+      getPostResult: function(value) {
         console.log(value);
         this.title = value.title
-        for (var i = 0; i < this.users.length; i++) {
-          if (this.users[i].id == value.badge_user)
-            this.relatedUser = this.users[i].username
-        }
+        this.text = value.text
       }
     },
     created: function() {
       this.$store.dispatch('setTitle', this.title)
-      var body = {
-        url: 'http://restful.daneshboom.ir/users/?format=json',
-        token: this.$cookie.get('daneshboom_token'),
-        method: 'get',
-        result: 'newUserBadgeResult'
-      }
-      this.$socket.emit('rest request', body)
 
-      /*if (this.getParameterByName('id') != null) {
+      if (this.getParameterByName('id') != null) {
         this.id = this.getParameterByName('id');
         var updateBody = {
-          url: 'http://restful.daneshboom.ir/organizations/abilities/' + this.id + '/?format=json',
-          token: this.$cookie.get('daneshboom_token'),
+          url: 'http://teamche.daneshboom.ir/posts/' + this.id + '/?format=json',
+          token: this.$cookie.get('teamche_token'),
           method: 'get',
-          result: 'getOrganizationAbilityResult'
+          result: 'getPostResult'
         }
         this.$socket.emit('rest request', updateBody)
       }
-      console.log(this.getParameterByName('id'));*/
+      console.log(this.getParameterByName('id'));
     }
   }
 </script>

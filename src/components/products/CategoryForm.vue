@@ -3,62 +3,29 @@
   <v-card>
   <v-card-text>
   <v-form v-model="valid" ref="form" lazy-validation>
-
     <v-text-field
       label="Title"
       v-model="title"
       :rules="titleRules"
       :counter="100"
-      v-bind:loading="loading"
+      v-bind:laoding="loading"
       required
     ></v-text-field>
-
-    <v-text-field
-      label="Description"
-      v-model="description"
-      :rules="descriptionRules"
-      :counter="200"
+    
+    <v-select
+      label="Related Parent"
+      v-model="relatedParent"
+      :items="relatedParentItems"
       v-bind:loading="loading"
       required
-    ></v-text-field>
-
-    <v-text-field
-      label="Phone Number"
-      v-model="phoneNumber"
-      :rules="phoneNumberRules"
-      :counter="11"
-      v-bind:loading="loading"
-    ></v-text-field>
-
-    <v-text-field
-      label="Latitude"
-      v-model="latitude"
-      :rules="latitudeRules"
-      :counter="15"
-      v-bind:loading="loading"
-    ></v-text-field>
-
-    <v-text-field
-      label="longitude"
-      v-model="longitude"
-      :rules="longitudeRules"
-      :counter="15"
-      v-bind:loading="loading"
-    ></v-text-field>
-
-    <v-text-field
-      label="Address"
-      v-model="address"
-      :rules="addressRules"
-      :counter="200"
-      v-bind:loading="loading"
-    ></v-text-field>
+      autocomplete
+    ></v-select>
 
     <v-select
-      label="Related Category"
-      v-model="relatedCategory"
-      :items="relatedCategoryItems"
-      :rules="[v => !!v || 'Category is required']"
+      label="Related Store"
+      v-model="relatedStore"
+      :items="relatedStoreItems"
+      :rules="[v => !!v || 'Parent is required']"
       v-bind:loading="loading"
       required
       autocomplete
@@ -81,75 +48,61 @@
   export default {
     data: () => ({
       id: null,
-      title: 'Store',
+      title: 'Product Categories',
       valid: true,
       loading: true,
       title: '',
       titleRules: [
         (v) => !!v || 'Title is required',
-        (v) => v && v.length <= 100 || 'Title must be less than 100 characters'
+        (v) => v && v.length <= 100 || 'Title  must be less than 100 characters'
       ],
-      description: '',
-      descriptionRules: [
-        (v) => !!v || 'Description is required',
-        (v) => v && v.length <= 200 || 'Description must be less than 100 characters'
-      ],
-      phoneNumber: '',
-      phoneNumberRules: [
-        (v) => !v || v.length <= 11 || 'Phone number must be less than 11 characters'
-      ],
-      latitude: '',
-      latitudeRules: [
-        (v) => !v || v.length <= 15 || 'Latitude must be less than 15 characters'
-      ],
-      longitude: '',
-      longitudeRules: [
-        (v) => !v || v.length <= 15 || 'Longitude must be less than 15 characters'
-      ],
-      address: '',
-      addressRules: [
-        (v) => !v || v.length <= 200 || 'Address must be less than 200 characters'
-      ],
-      relatedCategory: null,
-      relatedCategoryItems: [],
-      categories: []
+      relatedParent: null,
+      relatedParentItems: [],
+      parents: [],
+      relatedStore: null,
+      relatedStoreItems: [],
+      stores: []
     }),
     methods: {
       submit () {
         if (this.$refs.form.validate()) {
           // Native form submission is not yet supported
-          var category_value = 0
-          for(var i = 0; i < this.categories.length; i++){
-            if(this.categories[i].title == this.relatedCategory){
-              category_value = this.categories[i].id
+          var parent_value = 0
+          for(var i = 0; i < this.parents.length; i++){
+            if(this.parents[i] && this.parents[i].title  == this.relatedParent){
+              parent_value = this.parents[i].id
+              break
+            }
+          }
+
+          var store_value = 0
+          for(var i = 0; i < this.stores.length; i++){
+            if(this.stores[i].title == this.relatedStore){
+              store_value = this.stores[i].id
               break
             }
           }
 
           var data = {
             title: this.title,
-            description: this.description,
-            phone_number: this.phoneNumber,
-            latitude: this.latitude,
-            longitude: this.longitude,
-            address: this.address,
-            store_related_category: category_value
+            product_category_related_parent: parent_value,
+            product_category_related_store: store_value
           }
 
           if (this.id != null) {
             var body = {
               token: this.$cookie.get('teamche_token'),
-              url: 'http://teamche.daneshboom.ir/stores/' + this.id + '/',
+              url: 'http://teamche.daneshboom.ir/products/categories/' + this.id + '/',
               method: 'patch',
-              result: 'newStoreProcess',
+              result: 'newProductCategoryProcess',
               data: data
             }
           } else {
             var body = {
               token: this.$cookie.get('teamche_token'),
-              url: 'http://teamche.daneshboom.ir/users/badges/',
+              url: 'http://teamche.daneshboom.ir/products/categories/',
               method: 'post',
-              result: 'newStoreProcess',
+              result: 'newProductCategoryProcess',
               data: data
             }
           }
@@ -171,28 +124,44 @@
       }
     },
     sockets: {
-      newStoreResult: function(value) {
-        this.categories = value
-        for(var i = 0; i < this.categories.length; i++){
-          this.relatedCategoryItems.push(this.categories[i].title)
+      newProductCategoryResult: function(value) {
+        this.parents = value
+        for(var i = 0; i < this.parents.length; i++){
+          this.relatedParentItems.push(this.parents[i].title)
         }
-        console.log(this.relatedCategoryItems)
+        console.log(this.relatedParentItems)
+
+        var body = {
+          url: 'http://teamche.daneshboom.ir/stores/?format=json',
+          token: this.$cookie.get('teamche_token'),
+          method: 'get',
+          result: 'getStoresResult'
+        }
+        this.$socket.emit('rest request', body)
+
+      },
+      getStoresResult: function(value) {
+        this.stores = value
+        for(var i = 0; i < this.stores.length; i++){
+          this.relatedStoreItems.push(this.stores[i].title)
+        }
+        console.log(this.relatedStoreItems)
 
         if (this.getParameterByName('id') != null) {
           this.id = this.getParameterByName('id');
           var updateBody = {
-            url: 'http://teamche.daneshboom.ir/stores/' + this.id + '/?format=json',
+            url: 'http://teamche.daneshboom.ir/products/categories/' + this.id + '/?format=json',
             token: this.$cookie.get('teamche_token'),
             method: 'get',
-            result: 'getStoreResult'
+            result: 'getProductCategoryResult'
           }
           this.$socket.emit('rest request', updateBody)
         } else {
           this.loading = false;
         }
-        console.log(this.getParameterByName('id'));        
+        console.log(this.getParameterByName('id'));
       },
-      newStoreProcess: function(value) {
+      newProductCategoryProcess: function(value) {
         console.log(value)
         if ('id' in value){
           if (this.id != null) {
@@ -205,7 +174,7 @@
             title: 'Successfully',
             text: text_value
           }).then((result) => {
-            this.$router.push('/stores');
+            this.$router.push('/products/categories');
           });
         } else {
           this.$swal({
@@ -215,18 +184,17 @@
           });
         }
       },
-      getStoreResult: function(value) {
+      getProductCategoryResult: function(value) {
         console.log(value);
         this.title = value.title
-        this.description = value.description
-        this.phoneNumber = value.phone_number
-        this.latitude = value.latitude
-        this.longitude = value.longitude
-        this.address = value.address
+        for (var i = 0; i < this.parents.length; i++) {
+          if (this.parents[i].id == value.product_category_related_parent)
+            this.relatedParent = this.parents[i].title
+        }
 
-        for (var i = 0; i < this.categories.length; i++) {
-          if (this.categories[i].id == value.store_related_category.id)
-            this.relatedCategory = this.categories[i].title
+        for (var j = 0; j < this.stores.length; j++) {
+          if (this.stores[j].id == value.product_category_related_store)
+            this.relatedStore = this.stores[j].title
         }
 
         this.loading = false;
@@ -235,10 +203,10 @@
     created: function() {
       this.$store.dispatch('setTitle', this.title)
       var body = {
-        url: 'http://teamche.daneshboom.ir/stores/categories/?format=json',
+        url: 'http://teamche.daneshboom.ir/products/categories/?format=json',
         token: this.$cookie.get('teamche_token'),
         method: 'get',
-        result: 'newStoreResult'
+        result: 'newProductCategoryResult'
       }
       this.$socket.emit('rest request', body)
 

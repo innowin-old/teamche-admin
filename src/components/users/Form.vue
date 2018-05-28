@@ -113,7 +113,7 @@
             first_name: this.firstName,
             last_name: this.lastName,
             email: this.email,
-            gender: gender
+            gender: this.gender
           }
 
           if (this.id != null) {

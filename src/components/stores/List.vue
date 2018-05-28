@@ -3,7 +3,7 @@
     <v-container>
       <v-card-title>
         <div class="buttons">
-          <v-btn color="cyan" dark v-on:click="navigate('New-Store')">New Store</v-btn>
+          <v-btn color="cyan" dark v-on:click="navigate('/stores/create')">New Store</v-btn>
         </div>
         <v-spacer></v-spacer>
         <v-text-field
