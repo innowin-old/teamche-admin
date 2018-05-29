@@ -114,7 +114,7 @@
         }).then((result) => {
           if (result.value) {
             var body = {
-              url: "http://restful.daneshboom.ir/users/" + id + "/",
+              url: "http://teamche.daneshboom.ir/users/" + id + "/",
               method: 'del',
               token: this.$cookie.get('teamche_token'),
               result: 'categoryDeleteResult',

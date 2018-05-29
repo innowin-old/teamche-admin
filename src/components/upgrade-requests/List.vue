@@ -3,8 +3,6 @@
     <v-container>
       <v-card-title>
         <div class="buttons">
-          <v-btn color="success" dark v-on:click="navigate('Import-Upgrade-Requests')">Import</v-btn>
-          <v-btn color="pink" dark>Export</v-btn>
           <v-btn color="cyan" dark v-on:click="navigate('New-Upgrade-Request')">New Upgrade Request</v-btn>
         </div>
         <v-spacer></v-spacer>
