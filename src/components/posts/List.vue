@@ -59,6 +59,7 @@
           { text: 'ID', value: 'id', align: 'left' },
           { text: 'Title', value: 'title', align: 'left' },
           { text: 'Text', value: 'text', align: 'left' },
+          { text: '' }
         ],
         dialog: false,
         notifications: false,

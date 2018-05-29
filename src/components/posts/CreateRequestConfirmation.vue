@@ -3,7 +3,6 @@
     <v-container>
       <v-card-title>
         <div class="buttons">
-          <v-btn color="cyan" dark v-on:click="navigate('New-Post')">New Post</v-btn>
         </div>
         <v-spacer></v-spacer>
         <v-text-field
@@ -59,6 +58,7 @@
           { text: 'ID', value: 'id', align: 'left' },
           { text: 'Title', value: 'title', align: 'left' },
           { text: 'Text', value: 'text', align: 'left' },
+          { text: '' }
         ],
         dialog: false,
         notifications: false,
@@ -85,7 +85,7 @@
     created: function() {
       this.$store.dispatch('setTitle', this.title)
       var body = {
-        url: 'http://teamche.daneshboom.ir/posts/?format=json',
+        url: 'http://teamche.daneshboom.ir/posts/create_confirmation/?format=json',
         token: this.$cookie.get('teamche_token'),
         method: 'get',
         result: 'usersResult'
