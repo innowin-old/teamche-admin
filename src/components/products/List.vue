@@ -120,8 +120,7 @@
               result: 'categoryDeleteResult',
             }
             this.$socket.emit('rest request', body);
-            this.$delete(this.items, index);
-            this.items.splice(index);
+            this.items.splice(index, 1);
             this.$swal(
               'خذف شد!',
               'رکورد مورد نظر شما با موفقیت حذف شد.',
