@@ -8,7 +8,7 @@
       v-model="title"
       :rules="titleRules"
       :counter="100"
-      v-bind:laoding="loading"
+      v-bind:loading="loading"
       required
     ></v-text-field>
     

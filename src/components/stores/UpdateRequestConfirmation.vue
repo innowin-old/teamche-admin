@@ -3,7 +3,6 @@
     <v-container>
       <v-card-title>
         <div class="buttons">
-          <v-btn color="cyan" dark v-on:click="navigate('New-Store')">New Store</v-btn>
         </div>
         <v-spacer></v-spacer>
         <v-text-field
@@ -31,15 +30,14 @@
           <td v-if="props.item.store_related_owner">{{ props.item.store_related_owner.first_name }} {{ props.item.store_related_owner.last_name }}</td>
           <td v-else>-</td>
           <td>
-            <v-btn v-if="props.item.active_flag == true" flat small color="success" v-on:click="deactivate(props.item.id)">Active</v-btn>
-            <v-btn v-else flat small color="error" v-on:click="activate(props.item.id)">Deactive</v-btn>
-          </td>
-          <td>
-            <v-btn flat icon color="orange" class="tools-button" v-on:click="navigate('/update-store?id=' + props.item.id)">
+            <v-btn flat icon color="orange" class="tools-button" v-on:click="navigate('/stores/update?id=' + props.item.id)">
               <v-icon>edit</v-icon>
             </v-btn>
-            <v-btn flat icon color="red" dark class="tools-button" v-on:click="deleteRecord(props.item.id, props.index)">
-              <v-icon>delete</v-icon>
+            <v-btn flat icon color="green" class="tools-button" v-on:click="acceptUpdate(props.item.id, props.index)">
+              <v-icon>done</v-icon>
+            </v-btn>
+            <v-btn flat icon color="red" dark class="tools-button" v-on:click="denyUpdate(props.item.id, props.index)">
+              <v-icon>close</v-icon>
             </v-btn>
           </td>
         </template>
@@ -68,7 +66,6 @@
           { text: 'Category', value: 'store_related_category', align: 'left' },
           { text: 'Created User', value: 'store_related_user', align: 'left' },
           { text: 'Owner', value: 'store_related_owner', align: 'left' },
-          { text: '' },
           { text: '' }
         ],
         dialog: false,
@@ -116,7 +113,7 @@
     created: function() {
       this.$store.dispatch('setTitle', this.title)
       var body = {
-        url: 'http://teamche.daneshboom.ir/stores/',
+        url: 'http://teamche.daneshboom.ir/stores/update_confirmation/',
         token: this.$cookie.get('teamche_token'),
         method: 'get',
         result: 'storesResult'
@@ -127,31 +124,25 @@
       navigate: function(path) {
         this.$router.push(path)
       },
-      activate: function(id) {
-        var data = {
-          active_flag: true
-        }
+      acceptUpdate: function(id, index) {
         var body = {
-          url: 'http://teamche.daneshboom.ir/stores/' + id + '/',
+          url: 'http://teamche.daneshboom.ir/stores/' + id + '/accept_update/',
           token: this.$cookie.get('teamche_token'),
-          method: 'patch',
-          result: 'activateResult',
-          data: data
+          method: 'post',
+          result: 'acceptResult'
         }
         this.$socket.emit('rest request', body)
+        this.items.splice(index, 1);
       },
-      deactivate: function(id) {
-        var data = {
-          active_flag: false
-        }
+      denyUpdate: function(id, index) {
         var body = {
-          url: 'http://teamche.daneshboom.ir/stores/' + id + '/',
+          url: 'http://teamche.daneshboom.ir/stores/' + id + '/deny_update/',
           token: this.$cookie.get('teamche_token'),
-          method: 'patch',
-          result: 'deactivateResult',
-          data: data
+          method: 'post',
+          result: 'denyResult'
         }
         this.$socket.emit('rest request', body)
+        this.items.splice(index, 1);
       },
       deleteRecord: function(id, index) {
         this.$swal({

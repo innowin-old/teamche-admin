@@ -114,7 +114,7 @@
     created: function() {
       this.$store.dispatch('setTitle', this.title)
       var body = {
-        url: 'http://teamche.daneshboom.ir/products/',
+        url: 'http://teamche.daneshboom.ir/products/create_confirmation/',
         token: this.$cookie.get('teamche_token'),
         method: 'get',
         result: 'storesResult'
