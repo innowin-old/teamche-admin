@@ -26,6 +26,10 @@ import PostForm from '@/components/posts/Form'
 
 import UpgradeRequests from '@/components/upgrade-requests/List'
 
+import Comments from '@/components/comments/List'
+import CommentsCreateRequestConfirmation from '@/components/comments/CreateRequestConfirmation'
+import CommentsUpdateRequestConfirmation from '@/components/comments/UpdateRequestConfirmation'
+
 Vue.use(Router)
 
 export default new Router({
@@ -159,6 +163,21 @@ export default new Router({
       path: '/update-user',
       name: 'Update User',
       component: UserForm
+    },
+    {
+      path: '/comments',
+      name: 'Comments',
+      component: Comments
+    },
+    {
+      path: '/comments/create-request-confirmation',
+      name: 'Create Comment Confirmation',
+      component: CommentsCreateRequestConfirmation
+    },
+    {
+      path: '/comments/update-request-confirmation',
+      name: 'Update Comment Confirmation',
+      component: CommentsUpdateRequestConfirmation
     }
   ]
 })

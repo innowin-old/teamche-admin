@@ -163,6 +163,21 @@ export default {
             path: '/posts/update-request-confirmation'
           }
         ]
+      },
+      {
+        icon: 'list',
+        title: 'Comments',
+        path: '/comments',
+        items: [
+          {
+            title: 'Create Confirmation',
+            path: '/comments/create-request-confirmation'
+          },
+          {
+            title: 'Update Confirmation',
+            path: '/comments/update-request-confirmation'
+          }
+        ]
       }
       ],
       miniVariant: false,

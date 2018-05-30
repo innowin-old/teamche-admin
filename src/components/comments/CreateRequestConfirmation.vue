@@ -3,6 +3,7 @@
     <v-container>
       <v-card-title>
         <div class="buttons">
+          <v-btn color="cyan" dark v-on:click="navigate('/comments/create')">New Comment</v-btn>
         </div>
         <v-spacer></v-spacer>
         <v-text-field
@@ -24,10 +25,11 @@
       >
         <template slot="items" slot-scope="props">
           <td>{{ props.item.id }}</td>
-          <td>{{ props.item.title }}</td>
+          <td>{{ props.item.comment_related_user.first_name }} {{ props.item.comment_related_user.last_name }}</td>
           <td>{{ props.item.text }}</td>
+          <td>{{ props.item.comment_related_parent }}</td>
           <td>
-            <v-btn flat icon color="orange" class="tools-button" v-on:click="navigate('/posts/update?id=' + props.item.id)">
+            <v-btn flat icon color="orange" class="tools-button" v-on:click="navigate('/comments/update?id=' + props.item.id)">
               <v-icon>edit</v-icon>
             </v-btn>
             <v-btn flat icon color="green" class="tools-button" v-on:click="accept(props.item.id, props.index)">
@@ -51,7 +53,7 @@
     data: function () {
       return {
         items: [],
-        title: 'Products',
+        title: 'Comments',
         search: '',
         pagination: {
           rowsPerPage: 10
@@ -59,8 +61,9 @@
         selected: [],
         headers: [
           { text: 'ID', value: 'id', align: 'left' },
-          { text: 'Title', value: 'title', align: 'left' },
+          { text: 'Related User', value: 'comment_related_user', align: 'left' },
           { text: 'Text', value: 'text', align: 'left' },
+          { text: 'Related Parent', value: 'comment_related_parent', align: 'left' },
           { text: '' }
         ],
         dialog: false,
@@ -80,7 +83,7 @@
       }
     },
     sockets: {
-      usersResult: function(val) {
+      commentsResult: function(val) {
         this.items = val;
         this.loading = false;
       }
@@ -88,10 +91,10 @@
     created: function() {
       this.$store.dispatch('setTitle', this.title)
       var body = {
-        url: 'http://teamche.daneshboom.ir/posts/create_confirmation/?format=json',
+        url: 'http://teamche.daneshboom.ir/base/comments/create_confirmation/?format=json',
         token: this.$cookie.get('teamche_token'),
         method: 'get',
-        result: 'usersResult'
+        result: 'commentsResult'
       }
       this.$socket.emit('rest request', body)
     },
@@ -101,20 +104,20 @@
       },
       accept: function(id, index) {
         var body = {
-          url: 'http://teamche.daneshboom.ir/posts/' + id  + '/accept/',
+          url: 'http://teamche.daneshboom.ir/base/comments/' + id  + '/accept/',
           token: this.$cookie.get('teamche_token'),
           method: 'post',
-          result: 'acceptPostsResult'
+          result: 'acceptCommentsResult'
         }
         this.$socket.emit('rest request', body)
         this.items.splice(index, 1)
       },
       deny: function(id, index) {
         var body = {
-          url: 'http://teamche.daneshboom.ir/posts/' + id + '/deny/',
+          url: 'http://teamche.daneshboom.ir/base/comments/' + id + '/deny/',
           token: this.$cookie.get('teamche_token'),
           method: 'post',
-          result: 'denyPostsResult'
+          result: 'denyCommentsResult'
         }
         this.$socket.emit('rest request', body)
         this.items.splice(index, 1)
@@ -132,14 +135,13 @@
         }).then((result) => {
           if (result.value) {
             var body = {
-              url: "http://restful.daneshboom.ir/posts/" + id + "/",
+              url: "http://teamche.daneshboom.ir/base/comments/" + id + "/",
               method: 'del',
               token: this.$cookie.get('teamche_token'),
-              result: 'categoryDeleteResult',
+              result: 'commentsDeleteResult',
             }
             this.$socket.emit('rest request', body);
-            this.$delete(this.items, index);
-            this.items.splice(index);
+            this.items.splice(index, 1);
             this.$swal(
               'خذف شد!',
               'رکورد مورد نظر شما با موفقیت حذف شد.',

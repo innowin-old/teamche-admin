@@ -28,11 +28,14 @@
           <td>{{ props.item.title }}</td>
           <td>{{ props.item.text }}</td>
           <td>
-            <v-btn flat icon color="orange" class="tools-button" v-on:click="editRecord(props.item.id)">
+            <v-btn flat icon color="orange" class="tools-button" v-on:click="navigate('/posts/update?id=' + props.item.id)">
               <v-icon>edit</v-icon>
             </v-btn>
-            <v-btn flat icon color="red" dark class="tools-button" v-on:click="deleteRecord(props.item.id, props.index)">
-              <v-icon>delete</v-icon>
+            <v-btn flat icon color="green" class="tools-button" v-on:click="accept(props.item.id, props.index)">
+              <v-icon>done</v-icon>
+            </v-btn>
+            <v-btn flat icon color="red" dark class="tools-button" v-on:click="deny(props.item.id, props.index)">
+              <v-icon>close</v-icon>
             </v-btn>
           </td>
         </template>
@@ -96,6 +99,26 @@
     methods: {
       navigate: function(path) {
         this.$router.push(path)
+      },
+      accept: function(id, index) {
+        var body = {
+          url: 'http://teamche.daneshboom.ir/posts/' + id  + '/accept/',
+          token: this.$cookie.get('teamche_token'),
+          method: 'post',
+          result: 'acceptPostsResult'
+        }
+        this.$socket.emit('rest request', body)
+        this.items.splice(index, 1)
+      },
+      deny: function(id, index) {
+        var body = {
+          url: 'http://teamche.daneshboom.ir/posts/' + id + '/deny/',
+          token: this.$cookie.get('teamche_token'),
+          method: 'post',
+          result: 'denyPostsResult'
+        }
+        this.$socket.emit('rest request', body)
+        this.items.splice(index, 1)
       },
       deleteRecord: function(id, index) {
         this.$swal({
