@@ -3,7 +3,6 @@
     <v-container>
       <v-card-title>
         <div class="buttons">
-          <v-btn color="cyan" dark v-on:click="navigate('/products/categories/create')">New Category</v-btn>
         </div>
         <v-spacer></v-spacer>
         <v-text-field
@@ -25,15 +24,19 @@
       >
         <template slot="items" slot-scope="props">
           <td>{{ props.item.id }}</td>
-          <td>{{ props.item.title }}</td>
-          <td>{{ props.item.product_category_related_parent }}</td>
-          <td>{{ props.item.product_category_related_store }}</td>
+          <td>{{ props.item.reason }}</td>
+          <td>{{ props.item.start_date }}</td>
+          <td>{{ props.item.end_date }}</td>
+          <td>{{ props.item.product_offer_related_product.title }} - {{ props.item.id }}</td>
           <td>
-            <v-btn flat icon color="orange" class="tools-button" v-on:click="navigate('/products/categories/update?id=' + props.item.id)">
+            <v-btn flat icon color="orange" class="tools-button" v-on:click="navigate('/products/offers/update?id=' + props.item.id)">
               <v-icon>edit</v-icon>
             </v-btn>
-            <v-btn flat icon color="red" dark class="tools-button" v-on:click="deleteRecord(props.item.id, props.index)">
-              <v-icon>delete</v-icon>
+            <v-btn flat icon color="green" class="tools-button" v-on:click="accept(props.item.id, props.index)">
+              <v-icon>done</v-icon>
+            </v-btn>
+            <v-btn flat icon color="red" dark class="tools-button" v-on:click="deny(props.item.id, props.index)">
+              <v-icon>close</v-icon>
             </v-btn>
           </td>
         </template>
@@ -50,7 +53,7 @@
     data: function () {
       return {
         items: [],
-        title: 'Product Categories',
+        title: 'Product Special Offers',
         search: '',
         pagination: {
           rowsPerPage: 10
@@ -58,9 +61,10 @@
         selected: [],
         headers: [
           { text: 'ID', value: 'id', align: 'left' },
-          { text: 'Title', value: 'title', align: 'left' },
-          { text: 'Related Parent', value: 'product_category_related_parent', align: 'left' },
-          { text: 'Related Store', value: 'product_category_related_Store', align: 'left' },
+          { text: 'Reason', value: 'reason', align: 'left' },
+          { text: 'Start Date', value: 'start_date', align: 'left' },
+          { text: 'End Date', value: 'end_date', align: 'left' },
+          { text: 'Related Product', value: 'product_offer_related_product', align: 'left' },
           { text: '' }
         ],
         dialog: false,
@@ -80,7 +84,7 @@
       }
     },
     sockets: {
-      productCategoriesResult: function(val) {
+      productOffersResult: function(val) {
         this.items = val;
         this.loading = false;
       }
@@ -88,10 +92,10 @@
     created: function() {
       this.$store.dispatch('setTitle', this.title)
       var body = {
-        url: 'http://teamche.daneshboom.ir/products/categories/?format=json',
+        url: 'http://teamche.daneshboom.ir/products/offers/?format=json',
         token: this.$cookie.get('teamche_token'),
         method: 'get',
-        result: 'productCategoriesResult'
+        result: 'productOffersResult'
       }
       this.$socket.emit('rest request', body)
     },
@@ -112,10 +116,10 @@
         }).then((result) => {
           if (result.value) {
             var body = {
-              url: "http://restful.daneshboom.ir/products/categories/" + id + "/",
+              url: "http://restful.daneshboom.ir/products/offers/" + id + "/",
               method: 'del',
               token: this.$cookie.get('teamche_token'),
-              result: 'categoryDeleteResult',
+              result: 'productOfferDeleteResult',
             }
             this.$socket.emit('rest request', body);
             this.items.splice(index, 1);

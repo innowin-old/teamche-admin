@@ -85,7 +85,7 @@
       loginResult: function(val) {
         this.$store.dispatch('setToken', val.token)
         this.$cookie.set('teamche_token', val.token, 30)
-        this.$cookie.set('teamche_user', val.user.id, 30)
+        //this.$cookie.set('teamche_user', val.user.id, 30)
         this.$router.push('/')
         console.log(this.$store.getters.token)
       }

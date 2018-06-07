@@ -19,6 +19,10 @@ import ProductForm from '@/components/products/Form'
 import ProductCategories from '@/components/products/CategoriesList'
 import ProductCategoryForm from '@/components/products/CategoryForm'
 
+import ProductOffers from '@/components/products/OffersList'
+import ProductOfferCreateRequestConfirmation from '@/components/products/OfferCreateRequestConfirmation'
+import ProductOfferUpdateRequestConfirmation from '@/components/products/OfferUpdateRequestConfirmation'
+
 import Posts from '@/components/posts/List'
 import PostCreateRequestConfirmation from '@/components/posts/CreateRequestConfirmation'
 import PostUpdateRequestConfirmation from '@/components/posts/UpdateRequestConfirmation'
@@ -123,6 +127,21 @@ export default new Router({
       path: '/products/categories/update',
       name: 'Update Product Category',
       component: ProductCategoryForm
+    },
+    {
+      path: '/products/offers',
+      name: 'Product Offers',
+      component: ProductOffers
+    },
+    {
+      path: '/products/offers/create_confirmation',
+      name: 'Create offers confirmation',
+      component: ProductOfferCreateRequestConfirmation
+    },
+    {
+      path: '/products/offers/update_confirmation',
+      name: 'Update offers confirmation',
+      component: ProductOfferUpdateRequestConfirmation
     },
     {
       path: '/posts',

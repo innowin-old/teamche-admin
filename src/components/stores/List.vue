@@ -116,7 +116,7 @@
     created: function() {
       this.$store.dispatch('setTitle', this.title)
       var body = {
-        url: 'http://teamche.daneshboom.ir/stores/',
+        url: 'http://teamche.daneshboom.ir/stores/?related_parent=null',
         token: this.$cookie.get('teamche_token'),
         method: 'get',
         result: 'storesResult'

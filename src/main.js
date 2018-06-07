@@ -11,7 +11,8 @@ import store from './store';
 import VueSweetalert2 from 'vue-sweetalert2';
 
 Vue.use(VueCookie);
-Vue.use(VueSocketio, 'http://socket.daneshboom.ir');
+//Vue.use(VueSocketio, 'http://socket.daneshboom.ir');
+Vue.use(VueSocketio, 'http://89.42.210.20:9095')
 Vue.use(Vuetify);
 Vue.use(VueSweetalert2);
 

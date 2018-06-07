@@ -86,7 +86,7 @@
     created: function() {
       this.$store.dispatch('setTitle', this.title)
       var body = {
-        url: 'http://teamche.daneshboom.ir/posts/?format=json',
+        url: 'http://teamche.daneshboom.ir/posts/?related_parent=null',
         token: this.$cookie.get('teamche_token'),
         method: 'get',
         result: 'usersResult'

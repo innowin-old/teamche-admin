@@ -146,6 +146,18 @@ export default {
           {
             title: 'Categories List',
             path: '/products/categories'
+          },
+          {
+            title: 'Offers List',
+            path: '/products/offers/'
+          },
+          {
+            title: 'Offers Create Confirmation',
+            path: '/products/offers/create_confirmation'
+          },
+          {
+            title: 'Offers Update Confirmation',
+            path: '/products/offers/update_confirmation'
           }
         ]
       },

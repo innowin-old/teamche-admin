@@ -84,7 +84,7 @@
       }
     },
     sockets: {
-      usersResult: function(val) {
+      upgradeRequestsResult: function(val) {
         this.items = val
         this.loading = false
       },
@@ -108,7 +108,7 @@
         url: 'http://teamche.daneshboom.ir/users/upgrade-requests/?format=json',
         token: this.$cookie.get('teamche_token'),
         method: 'get',
-        result: 'usersResult'
+        result: 'upgradeRequestsResult'
       }
       this.$socket.emit('rest request', body)
     },
