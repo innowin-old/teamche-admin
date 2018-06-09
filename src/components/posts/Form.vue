@@ -34,6 +34,7 @@
     <v-btn @click="clear">clear</v-btn>
 
     <br/>
+    <img id="previous" v-show="imageData == ''" class="preview" />
     <img v-show="imageData != ''" class="preview" :src="imageData"/>
 
   </v-form>
@@ -59,7 +60,8 @@
         (v) => !!v || 'Text is required',
         (v) => v && v.length <= 400 || 'Text must be less than 400 characters'
       ],
-      imageData: ""
+      file_path: '',
+      imageData: ''
     }),
     methods: {
       upload (event) {
@@ -169,18 +171,6 @@
 
             this.$socket.emit('rest request', body);
           }
-          if (this.id != null) {
-            var text_value = 'Record Updated.';
-          } else {
-            var text_value = 'Record Added.';
-          }
-          this.$swal({
-            type: 'success',
-            title: 'Successfully',
-            text: text_value
-          }).then((result) => {
-            this.$router.push('/posts');
-          });
         } else {
           this.$swal({
             type: 'error',
@@ -193,6 +183,11 @@
         console.log(value);
         this.title = value.title
         this.text = value.text
+        if (value.image != null) {
+          console.log(value.image)
+          // this.file_path = 'http://localhost:8000' + value.image
+          document.getElementById("previous").src = 'http://localhost:8000' + value.image
+        }
       }
     },
     created: function() {
