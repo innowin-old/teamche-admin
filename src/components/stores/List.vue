@@ -27,8 +27,14 @@
           <td>{{ props.item.id }}</td>
           <td>{{ props.item.title }}</td>
           <td>{{ props.item.store_related_category.title }}</td>
-          <td>{{ props.item.store_related_user.first_name }} {{ props.item.store_related_user.last_name }}</td>
-          <td v-if="props.item.store_related_owner">{{ props.item.store_related_owner.first_name }} {{ props.item.store_related_owner.last_name }}</td>
+          <td>
+            {{ props.item.store_related_user.first_name }} {{ props.item.store_related_user.last_name }}
+            <span v-if="props.item.store_related_user.first_name == '' && props.item.store_related_user.last_name == ''">{{ props.item.store_related_user.username }}</span>
+          </td>
+          <td v-if="props.item.store_related_owner">
+            {{ props.item.store_related_owner.first_name }} {{ props.item.store_related_owner.last_name }}
+            <span v-if="props.item.store_related_owner.first_name == '' && props.item.store_related_owner.last_name == ''">{{ props.item.store_related_owner.username }}</span>
+          </td>
           <td v-else>-</td>
           <td>
             <v-btn v-if="props.item.active_flag == true" flat small color="success" v-on:click="deactivate(props.item.id)">Active</v-btn>
