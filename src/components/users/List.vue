@@ -131,7 +131,7 @@
           is_active: true
         }
         var body = {
-          url: 'http://teamche.daneshboom.ir/stores/' + id + '/',
+          url: 'http://teamche.daneshboom.ir/users/' + id + '/',
           token: this.$cookie.get('teamche_token'),
           method: 'patch',
           result: 'activateResult',
@@ -144,7 +144,7 @@
           is_active: false
         }
         var body = {
-          url: 'http://teamche.daneshboom.ir/stores/' + id + '/',
+          url: 'http://teamche.daneshboom.ir/users/' + id + '/',
           token: this.$cookie.get('teamche_token'),
           method: 'patch',
           result: 'deactivateResult',

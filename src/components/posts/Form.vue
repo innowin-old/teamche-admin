@@ -155,10 +155,10 @@
       newPostProcess: function(value) {
         console.log(value)
         if ('id' in value){
-          if (imageData != "") {
+          if (this.imageData != "") {
             var data = {
               file_related_parent: value.id,
-              file_path: imageData
+              file_path: this.imageData
             }
 
             var body = {
