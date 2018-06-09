@@ -30,6 +30,10 @@
           <td>{{ props.item.last_name }}</td>
           <td>{{ props.item.email }}</td>
           <td>
+            <v-btn v-if="props.item.is_active == true" flat small color="success" v-on:click="deactivate(props.item.id)">Active</v-btn>
+            <v-btn v-else flat small color="error" v-on:click="activate(props.item.id)">Deactive</v-btn>
+          </td>
+          <td>
             <v-btn flat icon color="orange" class="tools-button" v-on:click="navigate('/users/update?id=' + props.item.id)">
               <v-icon>edit</v-icon>
             </v-btn>
@@ -63,6 +67,7 @@
           { text: 'First Name', value: 'first_name', align: 'left' },
           { text: 'Last Name', value: 'last_name', align: 'left' },
           { text: 'Email', value: 'email', align: 'left' },
+          { text: '' },
           { text: '' }
         ],
         dialog: false,
@@ -85,6 +90,26 @@
       usersResult: function(val) {
         this.items = val;
         this.loading = false;
+      },
+      activateResult: function(val) {
+        console.log(val)
+        if ('id' in val){
+          for(var i = 0; i < this.items.length; i++){
+            if (this.items[i].id == val.id){
+              this.items[i].is_active  = true;
+            }
+          }
+        }
+      },
+      deactivateResult: function(val) {
+        console.log(val)
+        if ('id' in val){
+          for(var i = 0; i < this.items.length; i++){
+            if (this.items[i].id == val.id){
+              this.items[i].is_active = false;
+            }
+          }
+        }
       }
     },
     created: function() {
@@ -100,6 +125,32 @@
     methods: {
       navigate: function(path) {
         this.$router.push(path)
+      },
+      activate: function(id) {
+        var data = {
+          is_active: true
+        }
+        var body = {
+          url: 'http://teamche.daneshboom.ir/stores/' + id + '/',
+          token: this.$cookie.get('teamche_token'),
+          method: 'patch',
+          result: 'activateResult',
+          data: data
+        }
+        this.$socket.emit('rest request', body)
+      },
+      deactivate: function(id) {
+        var data = {
+          is_active: false
+        }
+        var body = {
+          url: 'http://teamche.daneshboom.ir/stores/' + id + '/',
+          token: this.$cookie.get('teamche_token'),
+          method: 'patch',
+          result: 'deactivateResult',
+          data: data
+        }
+        this.$socket.emit('rest request', body)
       },
       deleteRecord: function(id, index) {
         this.$swal({

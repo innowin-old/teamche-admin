@@ -105,7 +105,7 @@
     created: function() {
       this.$store.dispatch('setTitle', this.title)
       var body = {
-        url: 'http://teamche.daneshboom.ir/users/upgrade-requests/?format=json',
+        url: 'http://teamche.daneshboom.ir/users/upgrade-requests/?is_new=True',
         token: this.$cookie.get('teamche_token'),
         method: 'get',
         result: 'upgradeRequestsResult'
