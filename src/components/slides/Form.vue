@@ -87,9 +87,17 @@
       submit () {
         if (this.$refs.form.validate()) {
 
-          var data = {
-            title: this.title,
-            text: this.text
+          if (this.imageData != ''){
+            var data = {
+              title: this.title,
+              link: this.link,
+              file_string: this.imageData
+            }
+          } else {
+            var data = {
+              title: this.title,
+              link: this.link
+            }
           }
 
           if (this.id != null) {
@@ -155,7 +163,7 @@
       newSlideProcess: function(value) {
         console.log(value)
         if ('id' in value){
-          if (this.imageData != "") {
+          /*if (this.imageData != "") {
             var data = {
               file_related_parent: value.id,
               file_path: this.imageData
@@ -170,7 +178,7 @@
             }
 
             this.$socket.emit('rest request', body);
-          } else {
+          } else {*/
             if ('id' in value) {
               if (this.id != null) {
                 var text_value = 'Record Updated.';
@@ -191,7 +199,7 @@
                 text: value[Object.keys(value)[0]]
               });
             }
-          }
+          // }
         } else {
           this.$swal({
             type: 'error',
