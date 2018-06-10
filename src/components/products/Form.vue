@@ -16,7 +16,7 @@
       label="Description"
       v-model="description"
       :rules="descriptionRules"
-      :counter="100"
+      :counter="300"
       v-bind:loading="loading"
       required
     ></v-text-field>
@@ -28,6 +28,23 @@
       :counter="20"
       v-bind:loading="loading"
       required
+    ></v-text-field>
+
+    <v-text-field
+      label="Price"
+      v-model="price"
+      :rules="priceRules"
+      :counter="20"
+      v-bind:loading="loading"
+      required
+    ></v-text-field>
+
+    <v-text-field
+      label="Discount"
+      v-model="discount"
+      :rules="discountRules"
+      :counter="10"
+      v-bind:loading="loading"
     ></v-text-field>
 
     <v-select
@@ -77,12 +94,20 @@
       ],
       description: '',
       descriptionRules: [
-        (v) => v && v.length <= 100 || 'Description must be less than 100 characters'
+        (v) => v && v.length <= 300 || 'Description must be less than 100 characters'
       ],
       brand: '',
       brandRules: [
         (v) => !!v || 'Brand is required',
         (v) => v && v.length <= 20 || 'Brand must be less than 20 characters'
+      ],
+      price: '',
+      priceRules: [
+        (v) => !!v || 'Price is required',
+      ],
+      discount: '',
+      discountRules: [
+        (v) => !v || v.length <= 20 || 'Discount must be less than 10 characters'
       ],
       relatedStore: null,
       relatedStoreItems: [],
@@ -116,6 +141,8 @@
             title: this.title,
             description: this.description,
             brand: this.brand,
+            price: this.price,
+            discount: this.discount,
             product_related_store: store_value,
             product_related_category: category_value
           }
@@ -220,6 +247,8 @@
         this.title = value.title
         this.description = value.description
         this.brand = value.brand
+        this.price = value.price
+        this.discount = value.discount.value
 
         for (var i = 0; i < this.stores.length; i++) {
           if (this.stores[i].id == value.product_related_store.id)
