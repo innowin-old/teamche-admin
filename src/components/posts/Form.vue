@@ -199,7 +199,7 @@
         if (value.image != null) {
           console.log(value.image)
           // this.file_path = 'http://localhost:8000' + value.image
-          document.getElementById("previous").src = 'http://localhost:8000' + value.image
+          document.getElementById("previous").src = 'http://teamche.daneshboom.ir' + value.image
         }
       }
     },
@@ -229,7 +229,7 @@
     margin-left: 0;
   }
   img.preview {
-    width: 100%;
+    width: 50%;
     background-color: white;
     border: 1px solid #DDD;
     padding: 5px;
