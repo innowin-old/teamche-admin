@@ -147,7 +147,7 @@
           } else {
             var body = {
               token: this.$cookie.get('teamche_token'),
-              url: 'http://teamche.daneshboom.ir/users/badges/',
+              url: 'http://teamche.daneshboom.ir/stores/',
               method: 'post',
               result: 'newStoreProcess',
               data: data
