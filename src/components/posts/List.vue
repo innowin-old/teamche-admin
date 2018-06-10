@@ -49,7 +49,7 @@
     data: function () {
       return {
         items: [],
-        title: 'Products',
+        title: 'Posts',
         search: '',
         pagination: {
           rowsPerPage: 10
