@@ -24,16 +24,16 @@
         v-bind:loading="loading"
       >
         <template slot="items" slot-scope="props">
-          <td>{{ props.item.id }}</td>
-          <td>{{ props.item.username }}</td>
-          <td>{{ props.item.first_name }}</td>
-          <td>{{ props.item.last_name }}</td>
-          <td>{{ props.item.email }}</td>
-          <td>
+          <td :key="props.index + 'id'">{{ props.item.id }}</td>
+          <td :key="props.index + 'username'">{{ props.item.username }}</td>
+          <td :key="props.index + 'first_name'">{{ props.item.first_name }}</td>
+          <td :key="props.index + 'last_name'">{{ props.item.last_name }}</td>
+          <td :key="props.index + 'email'">{{ props.item.email }}</td>
+          <td :key="props.index + 'activate'">
             <v-btn v-if="props.item.is_active == true" flat small color="success" v-on:click="deactivate(props.item.id)">Active</v-btn>
             <v-btn v-else flat small color="error" v-on:click="activate(props.item.id)">Deactive</v-btn>
           </td>
-          <td>
+          <td :key="props.index + 'process'">
             <v-btn flat icon color="orange" class="tools-button" v-on:click="navigate('/users/update?id=' + props.item.id)">
               <v-icon>edit</v-icon>
             </v-btn>
@@ -67,7 +67,7 @@
           { text: 'First Name', value: 'first_name', align: 'left' },
           { text: 'Last Name', value: 'last_name', align: 'left' },
           { text: 'Email', value: 'email', align: 'left' },
-          { text: '' },
+          { text: 'Status' },
           { text: '' }
         ],
         dialog: false,

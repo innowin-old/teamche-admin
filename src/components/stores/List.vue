@@ -74,7 +74,7 @@
           { text: 'Category', value: 'store_related_category', align: 'left' },
           { text: 'Created User', value: 'store_related_user', align: 'left' },
           { text: 'Owner', value: 'store_related_owner', align: 'left' },
-          { text: '' },
+          { text: 'Status' },
           { text: '' }
         ],
         dialog: false,
