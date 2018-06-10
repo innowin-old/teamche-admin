@@ -34,6 +34,9 @@ import Comments from '@/components/comments/List'
 import CommentsCreateRequestConfirmation from '@/components/comments/CreateRequestConfirmation'
 import CommentsUpdateRequestConfirmation from '@/components/comments/UpdateRequestConfirmation'
 
+import Slides from '@/components/slides/List'
+import SlideForm from '@/components/slides/Form'
+
 Vue.use(Router)
 
 export default new Router({
@@ -197,6 +200,21 @@ export default new Router({
       path: '/comments/update-request-confirmation',
       name: 'Update Comment Confirmation',
       component: CommentsUpdateRequestConfirmation
+    },
+    {
+      path: '/slides',
+      name: 'Slides',
+      component: Slides
+    },
+    {
+      path: '/slides/create',
+      name: 'Create Slide',
+      component: SlideForm
+    },
+    {
+      path: '/slides/update',
+      name: 'Update Slide',
+      component: SlideForm
     }
   ]
 })

@@ -12,9 +12,9 @@
     ></v-text-field>
     
     <v-text-field
-      label="Text"
-      v-model="text"
-      :rules="textRules"
+      label="Link"
+      v-model="link"
+      :rules="linkRules"
       :counter="400"
       required
     ></v-text-field>
@@ -47,7 +47,7 @@
   export default {
     data: () => ({
       id: null,
-      title: 'Posts',
+      title: 'Slides',
       valid: true,
       loading: false,
       title: '',
@@ -55,10 +55,10 @@
         (v) => !!v || 'Title is required',
         (v) => v && v.length <= 100 || 'Title must be less than 100 characters'
       ],
-      text: '',
-      textRules: [
-        (v) => !!v || 'Text is required',
-        (v) => v && v.length <= 400 || 'Text must be less than 400 characters'
+      link: '',
+      linkRules: [
+        (v) => !!v || 'Link is required',
+        (v) => v && v.length <= 400 || 'Link must be less than 400 characters'
       ],
       file_path: '',
       imageData: ''
@@ -95,17 +95,17 @@
           if (this.id != null) {
             var body = {
               token: this.$cookie.get('teamche_token'),
-              url: 'http://teamche.daneshboom.ir/posts/' + this.id + '/',
+              url: 'http://teamche.daneshboom.ir/base/sliders/' + this.id + '/',
               method: 'patch',
-              result: 'newPostProcess',
+              result: 'newSlideProcess',
               data: data
             }
           } else {
             var body = {
               token: this.$cookie.get('teamche_token'),
-              url: 'http://teamche.daneshboom.ir/posts/',
+              url: 'http://teamche.daneshboom.ir/base/sliders/',
               method: 'post',
-              result: 'newPostProcess',
+              result: 'newSlideProcess',
               data: data
             }
           }
@@ -127,10 +127,10 @@
       }
     },
     sockets: {
-      newPostResult: function(value) {
+      newSlideResult: function(value) {
 
       },
-      newPostProcessResult: function(value) {
+      newSlideProcessResult: function(value) {
         if ('status' in value && value.status == 'SUCCESS') {
           if (this.id != null) {
             var text_value = 'Record Updated.';
@@ -142,7 +142,7 @@
             title: 'Successfully',
             text: text_value
           }).then((result) => {
-            this.$router.push('/posts');
+            this.$router.push('/slides');
           });
         } else {
           this.$swal({
@@ -152,7 +152,7 @@
           });
         }
       },
-      newPostProcess: function(value) {
+      newSlideProcess: function(value) {
         console.log(value)
         if ('id' in value){
           if (this.imageData != "") {
@@ -165,24 +165,32 @@
               token: this.$cookie.get('teamche_token'),
               url: 'http://teamche.daneshboom.ir/base/files/upload_base64/',
               method: 'post',
-              result: 'newPostProcessResult',
+              result: 'newSlideProcessResult',
               data: data
             }
 
             this.$socket.emit('rest request', body);
           } else {
-            if (this.id != null) {
-              var text_value = 'Record Updated.';
+            if ('id' in value) {
+              if (this.id != null) {
+                var text_value = 'Record Updated.';
+              } else {
+                var text_value = 'Record Added.';
+              }
+              this.$swal({
+                type: 'success',
+                title: 'Successfully',
+                text: text_value
+              }).then((result) => {
+                this.$router.push('/slides');
+              });
             } else {
-              var text_value = 'Record Added.';
+              this.$swal({
+                type: 'error',
+                title: 'Oops...',
+                text: value[Object.keys(value)[0]]
+              });
             }
-            this.$swal({
-              type: 'success',
-              title: 'Successfully',
-              text: text_value
-            }).then((result) => {
-              this.$router.push('/posts');
-            });
           }
         } else {
           this.$swal({
@@ -192,10 +200,10 @@
           });
         }
       },
-      getPostResult: function(value) {
+      getSlideResult: function(value) {
         console.log(value);
         this.title = value.title
-        this.text = value.text
+        this.link = value.link
         if (value.image != null) {
           console.log(value.image)
           // this.file_path = 'http://localhost:8000' + value.image
@@ -209,10 +217,10 @@
       if (this.getParameterByName('id') != null) {
         this.id = this.getParameterByName('id');
         var updateBody = {
-          url: 'http://teamche.daneshboom.ir/posts/' + this.id + '/?format=json',
+          url: 'http://teamche.daneshboom.ir/base/sliders/' + this.id + '/?format=json',
           token: this.$cookie.get('teamche_token'),
           method: 'get',
-          result: 'getPostResult'
+          result: 'getSlideResult'
         }
         this.$socket.emit('rest request', updateBody)
       }

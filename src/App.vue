@@ -190,6 +190,11 @@ export default {
             path: '/comments/update-request-confirmation'
           }
         ]
+      },
+      {
+        icon: 'list',
+        title: 'Slides',
+        path: '/slides'
       }
       ],
       miniVariant: false,
