@@ -83,11 +83,19 @@
     }),
     sockets: {
       loginResult: function(val) {
-        this.$store.dispatch('setToken', val.token)
-        this.$cookie.set('teamche_token', val.token, 30)
-        //this.$cookie.set('teamche_user', val.user.id, 30)
-        this.$router.push('/')
-        console.log(this.$store.getters.token)
+        if ('non_field_errors' in val) {
+          this.$swal({
+            type: 'error',
+            title: 'خطا در هنگام ورود به سیستم',
+            text: 'نام کاربری یا رمز عبور اشتباه است'
+          });
+        } else {
+          this.$store.dispatch('setToken', val.token)
+          this.$cookie.set('teamche_token', val.token, 30)
+          //this.$cookie.set('teamche_user', val.user.id, 30)
+          this.$router.push('/')
+          console.log(this.$store.getters.token)
+        }
       }
     },
     methods: {

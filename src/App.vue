@@ -54,8 +54,8 @@
       </v-btn>
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-        <v-icon>menu</v-icon>
+      <v-btn icon @click="logout">
+        <v-icon>exit_to_app</v-icon>
       </v-btn>
     </v-toolbar>
     <v-content>
@@ -69,7 +69,7 @@
       app
     >
       <v-list>
-        <v-list-tile @click="right = !right">
+        <v-list-tile v-on:click="right = !right">
           <v-list-tile-action>
             <v-icon>compare_arrows</v-icon>
           </v-list-tile-action>
@@ -206,6 +206,23 @@ export default {
   methods: {
     navigate: function(path) {
       this.$router.push(path)
+    },
+    logout: function() {
+      this.$swal({
+        title: 'آیا از سیستم خارج می شوید؟',
+        text: "پس از خروج برای استفاده از سیستم بایست دوباره نام کاربری و رمز عبور وارد شود.",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'بله از سیستم خارج شو',
+        cancelButtonText: 'لغو',
+      }).then((result) => {
+        if (result.value) {
+          this.$cookie.delete('teamche_token');
+          location.reload();
+        }
+      });
     }
   },
   components: {
