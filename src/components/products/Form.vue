@@ -5,81 +5,81 @@
   <v-container grid-list-md text-xs-center>
     <v-layout row wrap>
       <v-flex xs6>
-  <v-form v-model="valid" ref="form" lazy-validation>
-    <v-text-field
-      label="Title"
-      v-model="title"
-      :rules="titleRules"
-      :counter="100"
-      v-bind:loading="loading"
-      required
-    ></v-text-field>
+        <v-form v-model="valid" ref="form" lazy-validation>
+          <v-text-field
+            label="Title"
+            v-model="title"
+            :rules="titleRules"
+            :counter="100"
+            v-bind:loading="loading"
+            required
+          ></v-text-field>
 
-    <v-text-field
-      label="Description"
-      v-model="description"
-      :rules="descriptionRules"
-      :counter="300"
-      v-bind:loading="loading"
-      required
-      multi-line
-      dir="rtl"
-    ></v-text-field>
+          <v-text-field
+            label="Description"
+            v-model="description"
+            :rules="descriptionRules"
+            :counter="300"
+            v-bind:loading="loading"
+            required
+            multi-line
+            dir="rtl"
+          ></v-text-field>
 
-    <v-text-field
-      label="Brand"
-      v-model="brand"
-      :rules="brandRules"
-      :counter="20"
-      v-bind:loading="loading"
-      required
-    ></v-text-field>
+          <v-text-field
+            label="Brand"
+            v-model="brand"
+            :rules="brandRules"
+            :counter="20"
+            v-bind:loading="loading"
+            required
+          ></v-text-field>
 
-    <v-text-field
-      label="Price"
-      v-model="price"
-      :rules="priceRules"
-      :counter="20"
-      v-bind:loading="loading"
-      required
-    ></v-text-field>
+          <v-text-field
+            label="Price"
+            v-model="price"
+            :rules="priceRules"
+            :counter="20"
+            v-bind:loading="loading"
+            required
+          ></v-text-field>
 
-    <v-text-field
-      label="Discount"
-      v-model="discount"
-      :rules="discountRules"
-      :counter="10"
-      v-bind:loading="loading"
-    ></v-text-field>
+          <v-text-field
+            label="Discount"
+            v-model="discount"
+            :rules="discountRules"
+            :counter="10"
+            v-bind:loading="loading"
+          ></v-text-field>
 
-    <v-select
-      label="Related Store"
-      v-model="relatedStore"
-      :items="relatedStoreItems"
-      :rules="[v => !!v || 'Store is required']"
-      v-bind:loading="loading"
-      required
-      autocomplete
-    ></v-select>
+          <v-select
+            label="Related Store"
+            v-model="relatedStore"
+            :items="relatedStoreItems"
+            :rules="[v => !!v || 'Store is required']"
+            v-bind:loading="loading"
+            required
+            autocomplete
+          ></v-select>
 
-    <v-select
-      label="Related Category"
-      v-model="relatedCategory"
-      :items="relatedCategoryItems"
-      :rules="[v => !!v || 'Category is required']"
-      v-bind:loading="loading"
-      required
-      autocomplete
-    ></v-select>
+          <v-select
+            label="Related Category"
+            v-model="relatedCategory"
+            :items="relatedCategoryItems"
+            :rules="[v => !!v || 'Category is required']"
+            v-bind:loading="loading"
+            required
+            autocomplete
+          ></v-select>
 
-    <v-btn
-      @click="submit"
-      :disabled="!valid"
-    >
-      submit
-    </v-btn>
-    <v-btn @click="clear">clear</v-btn>
-    </v-form>
+          <v-btn
+            @click="submit"
+            :disabled="!valid"
+          >
+            submit
+          </v-btn>
+          <v-btn @click="clear">clear</v-btn>
+          </v-form>
         </v-flex>
         <v-flex xs6>
           <v-form ref="form">
@@ -148,6 +148,51 @@
     </v-container>
   </v-card-text>
   </v-card>
+      <v-card-title>
+        <div class="buttons">
+          <h2>Images</h2>
+        </div>
+        <v-spacer></v-spacer>
+        <v-text-field
+          append-icon="search"
+          label="Search"
+          single-line
+          hide-details
+          v-model="search"
+        ></v-text-field>
+      </v-card-title>
+      <v-data-table
+        v-bind:headers="headers"
+        v-bind:items="items"
+        v-bind:search="search"
+        v-bind:pagination.sync="pagination"
+        hide-actions
+        class="elevation-1"
+        v-bind:loading="imagesLoading"
+      >
+        <template slot="items" slot-scope="props">
+          <td>{{ props.item.id }}</td>
+          <td><img :src="'http://teamche.daneshboom.ir' + props.item.file_link" width="50"/></td>
+          <td>
+            <v-btn v-if="props.item.active_flag == true" flat small color="success" v-on:click="deactivate(props.item.id)">Active</v-btn>
+            <v-btn v-else flat small color="error" v-on:click="activate(props.item.id)">Deactive</v-btn>
+          </td>
+          <td>
+            <v-btn flat color="primary" v-on:click="showImage(props.item.file_link)">
+              Show Image
+            </v-btn>
+            <v-btn flat icon color="orange" class="tools-button" v-on:click="navigate('/products/categories/update?id=' + props.item.id)">
+              <v-icon>edit</v-icon>
+            </v-btn>
+            <v-btn flat icon color="red" dark class="tools-button" v-on:click="deleteRecord(props.item.id, props.index)">
+              <v-icon>delete</v-icon>
+            </v-btn>
+          </td>
+        </template>
+      </v-data-table>
+      <div class="text-xs-center pt-2">
+        <v-pagination v-model="pagination.page" :length="pages"></v-pagination>
+      </div>
   </v-container>
 </template>
 
@@ -192,9 +237,64 @@
       relatedCategory: null,
       relatedCategoryItems: [],
       categories: [],
-      previousRelatedCategory: null
+      previousRelatedCategory: null,
+      items: [],
+      search: '',
+      pagination: {
+        rowsPerPage: 10
+      },
+      selected: [],
+      headers: [
+        { text: 'ID', value: 'id', align: 'left' },
+        { text: 'Link', value: 'file_link', align: 'left' },
+        { text: 'Status' },
+        { text: '' }
+      ],
+      dialog: false,
+      notifications: false,
+      sound: true,
+      widgets: false,
+      imagesLoading: true
     }),
+    computed: {
+      pages () {
+        if (this.pagination.rowsPerPage == null ||
+          this.pagination.totalItems == null
+        ) return 0
+
+        return Math.ceil(this.items.length / this.pagination.rowsPerPage)
+      }
+    },
     methods: {
+      showImage(link) {
+        window.open('http://teamche.daneshboom.ir' + link, '_blank');
+      },
+      activate: function(id) {
+        var data = {
+          active_flag: true
+        }
+        var body = {
+          url: 'http://teamche.daneshboom.ir/base/files/' + id + '/',
+          token: this.$cookie.get('teamche_token'),
+          method: 'patch',
+          result: 'activateResult',
+          data: data
+        }
+        this.$socket.emit('rest request', body)
+      },
+      deactivate: function(id) {
+        var data = {
+          active_flag: false
+        }
+        var body = {
+          url: 'http://teamche.daneshboom.ir/base/files/' + id + '/',
+          token: this.$cookie.get('teamche_token'),
+          method: 'patch',
+          result: 'deactivateResult',
+          data: data
+        }
+        this.$socket.emit('rest request', body)
+      },
       submit () {
         if (this.$refs.form.validate()) {
 
@@ -260,6 +360,26 @@
       }
     },
     sockets: {
+      activateResult: function(val) {
+        console.log(val)
+        if ('id' in val){
+          for(var i = 0; i < this.items.length; i++){
+            if (this.items[i].id == val.id){
+              this.items[i].active_flag  = true;
+            }
+          }
+        }
+      },
+      deactivateResult: function(val) {
+        console.log(val)
+        if ('id' in val){
+          for(var i = 0; i < this.items.length; i++){
+            if (this.items[i].id == val.id){
+              this.items[i].active_flag = false;
+            }
+          }
+        }
+      },
       newProductResult: function(value) {
         this.stores = value
         for(var i = 0; i < this.stores.length; i++){
@@ -291,7 +411,16 @@
             method: 'get',
             result: 'getProductResult'
           }
-          this.$socket.emit('rest request', updateBody)
+          this.$socket.emit('rest request', updateBody);
+
+          var imagesBody = {
+            url: 'http://teamche.daneshboom.ir/base/files/',
+            token: this.$cookie.get('teamche_token'),
+            method: 'get',
+            result: 'getProductImages'
+          }
+          this.$socket.emit('rest request', imagesBody);
+
         } else {
           this.loading = false;
         }
@@ -320,13 +449,18 @@
           });
         }
       },
+      getProductImages: function(value) {
+        console.log(value);
+        this.items = value;
+        this.imagesLoading = false;
+      },
       getProductResult: function(value) {
         if (value.related_parent != null) {
           this.previousTitle = value.related_parent.title;
           this.previousDescription = value.related_parent.description;
           this.previousBrand = value.related_parent.brand;
           this.previousPrice = value.related_parent.price;
-          if (value.related_parent.discount != null && 'value' in value.related_parent.discount)
+          if (value.related_parent.discount != 0 && 'value' in value.related_parent.discount)
             this.previousDiscount = value.related_parent.discount;
 
           for (var i = 0; i < this.stores.length; i++) {
@@ -343,7 +477,7 @@
         this.description = value.description
         this.brand = value.brand
         this.price = value.price
-        if (value.discount != null && 'value' in value.discount)
+        if (value.discount != 0 && 'value' in value.discount)
           this.discount = value.discount.value
 
         for (var i = 0; i < this.stores.length; i++) {
