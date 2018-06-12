@@ -172,7 +172,7 @@
       priceRules: [
         (v) => !!v || 'Price is required',
       ],
-      previousPrice: '',
+      previousPrice: null,
       discount: '',
       discountRules: [
         (v) => !v || v.length <= 20 || 'Discount must be less than 10 characters'
@@ -314,7 +314,24 @@
         }
       },
       getProductResult: function(value) {
-        console.log(value);
+        if (value.related_parent != null) {
+          this.previousTitle = value.related_parent.title;
+          this.previousDescription = value.related_parent.description;
+          this.previousBrand = value.related_parent.brand;
+          this.previousPrice = value.related_parent.price;
+          if (value.related_parent.discount != null && 'value' in value.related_parent.discount)
+            this.previousDiscount = value.related_parent.discount;
+
+          for (var i = 0; i < this.stores.length; i++) {
+            if (this.stores[i].id == value.related_parent.product_related_store.id)
+              this.previousRelatedStore = this.stores[i].title
+          }
+
+          for (var j = 0; j < this.categories.length; j++) {
+            if (this.categories[j].id == value.related_parent.product_related_category.id)
+              this.previousRelatedCategory = this.categories[j].title
+          }
+        }
         this.title = value.title
         this.description = value.description
         this.brand = value.brand
