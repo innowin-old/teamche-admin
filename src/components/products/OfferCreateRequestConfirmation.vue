@@ -87,12 +87,18 @@
       productOffersResult: function(val) {
         this.items = val;
         this.loading = false;
+      },
+      acceptProductOffersResult: function(val) {
+        console.log(val)
+      },
+      denyProductOffersResult: function(val) {
+        console.log(val)
       }
     },
     created: function() {
       this.$store.dispatch('setTitle', this.title)
       var body = {
-        url: 'http://teamche.daneshboom.ir/products/offers/?format=json',
+        url: 'http://teamche.daneshboom.ir/products/offers/create_confirmation?format=json',
         token: this.$cookie.get('teamche_token'),
         method: 'get',
         result: 'productOffersResult'

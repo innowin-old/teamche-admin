@@ -66,7 +66,7 @@
           { text: 'Brand', value: 'brand', align: 'left' },
           { text: 'Related Store', value: 'product_related_store', align: 'left' },
           { text: 'Related Category', value: 'product_related_category', align: 'left' },
-          { text: '' },
+          { text: 'Status' },
           { text: '' }
         ],
         dialog: false,

@@ -92,7 +92,7 @@
     created: function() {
       this.$store.dispatch('setTitle', this.title)
       var body = {
-        url: 'http://teamche.daneshboom.ir/products/offers/?format=json',
+        url: 'http://teamche.daneshboom.ir/products/offers/update_confirmation?format=json',
         token: this.$cookie.get('teamche_token'),
         method: 'get',
         result: 'productOffersResult'
