@@ -483,7 +483,7 @@
       },
       getProductResult: function(value) {
         if (value.related_parent != null) {
-          this.isPrevious = True;
+          this.isPrevious = true;
           this.previousTitle = value.related_parent.title;
           this.previousDescription = value.related_parent.description;
           this.previousBrand = value.related_parent.brand;
