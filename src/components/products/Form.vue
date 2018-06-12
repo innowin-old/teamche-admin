@@ -81,7 +81,7 @@
           <v-btn @click="clear">clear</v-btn>
           </v-form>
         </v-flex>
-        <v-flex xs6>
+        <v-flex v-show="isPrevious" xs6>
           <v-form ref="form">
             
             <v-text-field
@@ -226,6 +226,7 @@
       discountRules: [
         (v) => !v || v.length <= 20 || 'Discount must be less than 10 characters'
       ],
+      isPrevious: false,
       previousDiscount: '',
       relatedStore: null,
       relatedStoreItems: [],
@@ -482,6 +483,7 @@
       },
       getProductResult: function(value) {
         if (value.related_parent != null) {
+          this.isPrevious = True;
           this.previousTitle = value.related_parent.title;
           this.previousDescription = value.related_parent.description;
           this.previousBrand = value.related_parent.brand;
@@ -499,6 +501,7 @@
               this.previousRelatedCategory = this.categories[j].title
           }
         }
+          
         this.title = value.title
         this.description = value.description
         this.brand = value.brand

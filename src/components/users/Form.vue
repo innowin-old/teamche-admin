@@ -49,6 +49,16 @@
       autocomplete
     ></v-select>
 
+    <v-select
+      label="Type"
+      v-model="type"
+      :items="typeItems"
+      :rules="[v => !!v || 'Type is required']"
+      v-bind:loading="loading"
+      required
+      autocomplete
+    ></v-select>
+
     <v-btn
       @click="submit"
       :disabled="!valid"
@@ -94,7 +104,13 @@
         'female',
         'male'
       ],
-      users: []
+      users: [],
+      type: null,
+      typeItems: [
+        'normal',
+        'specific',
+        'gold'
+      ]
     }),
     methods: {
       submit () {
@@ -113,7 +129,8 @@
             first_name: this.firstName,
             last_name: this.lastName,
             email: this.email,
-            gender: this.gender
+            gender: this.gender,
+            type: this.type
           }
 
           if (this.id != null) {
@@ -184,6 +201,7 @@
         this.lastName = value.last_name
         this.email = value.email
         this.gender = value.gender
+        this.type = value.type
         this.loading = false
       }
     },
