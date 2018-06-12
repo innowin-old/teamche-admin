@@ -236,8 +236,27 @@ export default {
       return this.$store.getters.token
     }
   },
+  sockets: {
+    tokenVerifyResult: function(value) {
+      console.log(value);
+      if ('non_field_errors' in value) {
+        this.$store.dispatch('setToken', '')
+      } else {
+        this.$store.dispatch('setToken', this.$cookie.get('teamche_token'));
+      }
+    }
+  },
   created: function() {
-    this.$store.dispatch('setToken', this.$cookie.get('teamche_token'))
+    var body = {
+      url: 'http://teamche.daneshboom.ir/api-token-verify/',
+      method: 'post',
+      result: 'tokenVerifyResult',
+      data: {
+        token: this.$cookie.get('teamche_token')
+      }
+    }
+    this.$socket.emit('rest request', body);
+    this.$store.dispatch('setToken', this.$cookie.get('teamche_token'));
   }
 }
 </script>
