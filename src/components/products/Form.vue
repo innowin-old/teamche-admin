@@ -439,11 +439,12 @@
           this.$socket.emit('rest request', updateBody);
 
           var imagesBody = {
-            url: 'http://teamche.daneshboom.ir/base/files/',
+            url: 'http://teamche.daneshboom.ir/base/files/?file_related_parent=' + this.id,
             token: this.$cookie.get('teamche_token'),
             method: 'get',
             result: 'getProductImages'
           }
+          console.log(imagesBody);
           this.$socket.emit('rest request', imagesBody);
 
         } else {
