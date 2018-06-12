@@ -217,7 +217,7 @@
         (v) => v && v.length <= 20 || 'Brand must be less than 20 characters'
       ],
       previousBrand: '',
-      price: '',
+      price: null,
       priceRules: [
         (v) => !!v || 'Price is required',
       ],
@@ -485,7 +485,7 @@
           this.previousDescription = value.related_parent.description;
           this.previousBrand = value.related_parent.brand;
           this.previousPrice = value.related_parent.price;
-          if (value.related_parent.discount != 0 && 'value' in value.related_parent.discount)
+          if (value.related_parent.discount != null && 'value' in value.related_parent.discount)
             this.previousDiscount = value.related_parent.discount;
 
           for (var i = 0; i < this.stores.length; i++) {
@@ -502,7 +502,7 @@
         this.description = value.description
         this.brand = value.brand
         this.price = value.price
-        if (value.discount != 0 && 'value' in value.discount)
+        if (value.discount != null && 'value' in value.discount)
           this.discount = value.discount.value
 
         for (var i = 0; i < this.stores.length; i++) {
