@@ -181,9 +181,6 @@
             <v-btn flat color="primary" v-on:click="showImage(props.item.file_link)">
               Show Image
             </v-btn>
-            <v-btn flat icon color="orange" class="tools-button" v-on:click="navigate('/products/categories/update?id=' + props.item.id)">
-              <v-icon>edit</v-icon>
-            </v-btn>
             <v-btn flat icon color="red" dark class="tools-button" v-on:click="deleteRecord(props.item.id, props.index)">
               <v-icon>delete</v-icon>
             </v-btn>
@@ -357,6 +354,34 @@
         if (!results) return null;
         if (!results[2]) return '';
         return decodeURIComponent(results[2].replace(/\+/g, " "));
+      },
+      deleteRecord: function(id, index) {
+        this.$swal({
+          title: 'آیا مطمئنید که رکورد حذف شود ؟',
+          text: "رکورد پس از حذف قابل بازگشت نخواهد بود",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'بله، آن را حذف کن',
+          cancelButtonText: 'لغو',
+        }).then((result) => {
+          if (result.value) {
+            var body = {
+              url: "http://teamche.daneshboom.ir/base/files/" + id + "/",
+              method: 'del',
+              token: this.$cookie.get('teamche_token'),
+              result: 'imageDeleteResult',
+            }
+            this.$socket.emit('rest request', body);
+            this.items.splice(index, 1);
+            this.$swal(
+              'خذف شد!',
+              'رکورد مورد نظر شما با موفقیت حذف شد.',
+              'success'
+            )
+          }
+        });
       }
     },
     sockets: {
