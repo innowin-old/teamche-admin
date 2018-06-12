@@ -2,6 +2,9 @@
   <v-container>
   <v-card>
   <v-card-text>
+  <v-container grid-list-md text-xs-center>
+    <v-layout row wrap>
+      <v-flex xs6>
   <v-form v-model="valid" ref="form" lazy-validation>
     <v-text-field
       label="Title"
@@ -19,6 +22,8 @@
       :counter="300"
       v-bind:loading="loading"
       required
+      multi-line
+      dir="rtl"
     ></v-text-field>
 
     <v-text-field
@@ -74,7 +79,66 @@
       submit
     </v-btn>
     <v-btn @click="clear">clear</v-btn>
-  </v-form>
+    </v-form>
+        </v-flex>
+        <v-flex xs6>
+          <v-form ref="form">
+            
+            <v-text-field
+              label="Previous Title"
+              v-model="previousTitle"
+              v-bind:loading="loading"
+              v-show="title != previousTitle"
+            ></v-text-field>
+
+            <v-text-field
+              label="Previous Description"
+              v-model="previousDescription"
+              v-bind:loading="loading"
+              multi-line
+              v-show="description != previousDescription"
+              dir="rtl"
+            ></v-text-field>
+
+            <v-text-field
+              label="Previous Brand"
+              v-model="previousBrand"
+              v-bind:loading="loading"
+              v-show="brand != previousBrand"
+            ></v-text-field>
+
+            <v-text-field
+              label="Previous Price"
+              v-model="previousPrice"
+              v-bind:loading="loading"
+              v-show="price != previousPrice"
+            ></v-text-field>
+
+            <v-text-field
+              label="Previous Discount"
+              v-model="previousDiscount"
+              v-bind:loading="loading"
+              v-show="discount != previousDiscount"
+            ></v-text-field>
+
+            <v-text-field
+              label="Previous Related Store"
+              v-model="previousRelatedStore"
+              v-bind:loading="loading"
+              v-show="relatedStore != previousRelatedStore"
+            ></v-text-field>
+
+            <v-text-field
+              label="Previous Related Category"
+              v-model="previousRelatedCategory"
+              v-bind:loading="loading"
+              v-show="relatedCategory != previousRelatedCategory"
+            ></v-text-field>
+
+          </v-form>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </v-card-text>
   </v-card>
   </v-container>
@@ -92,29 +156,36 @@
         (v) => !!v || 'Title is required',
         (v) => v && v.length <= 100 || 'Title must be less than 100 characters'
       ],
+      previousTitle: '',
       description: '',
       descriptionRules: [
         (v) => v && v.length <= 300 || 'Description must be less than 100 characters'
       ],
+      previousDescription: '',
       brand: '',
       brandRules: [
         (v) => !!v || 'Brand is required',
         (v) => v && v.length <= 20 || 'Brand must be less than 20 characters'
       ],
+      previousBrand: '',
       price: '',
       priceRules: [
         (v) => !!v || 'Price is required',
       ],
+      previousPrice: '',
       discount: '',
       discountRules: [
         (v) => !v || v.length <= 20 || 'Discount must be less than 10 characters'
       ],
+      previousDiscount: '',
       relatedStore: null,
       relatedStoreItems: [],
       stores: [],
+      previousRelatedStore: null,
       relatedCategory: null,
       relatedCategoryItems: [],
-      categories: []
+      categories: [],
+      previousRelatedCategory: null
     }),
     methods: {
       submit () {
@@ -203,7 +274,7 @@
         for(var i = 0; i < this.categories.length; i++){
           this.relatedCategoryItems.push(this.categories[i].title)
         }
-        console.log(this.relatedCategories);
+        console.log(this.relatedCategoryItems);
 
         if (this.getParameterByName('id') != null) {
           this.id = this.getParameterByName('id');
@@ -248,7 +319,8 @@
         this.description = value.description
         this.brand = value.brand
         this.price = value.price
-        this.discount = value.discount.value
+        if (value.discount != null && 'value' in value.discount)
+          this.discount = value.discount.value
 
         for (var i = 0; i < this.stores.length; i++) {
           if (this.stores[i].id == value.product_related_store.id)
