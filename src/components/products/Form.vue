@@ -89,6 +89,7 @@
               v-model="previousTitle"
               v-bind:loading="loading"
               v-show="title != previousTitle"
+              readonly
             ></v-text-field>
 
             <v-text-field
@@ -98,6 +99,7 @@
               multi-line
               v-show="description != previousDescription"
               dir="rtl"
+              readonly
             ></v-text-field>
 
             <v-text-field
@@ -105,6 +107,7 @@
               v-model="previousBrand"
               v-bind:loading="loading"
               v-show="brand != previousBrand"
+              readonly
             ></v-text-field>
 
             <v-text-field
@@ -112,6 +115,7 @@
               v-model="previousPrice"
               v-bind:loading="loading"
               v-show="price != previousPrice"
+              readonly
             ></v-text-field>
 
             <v-text-field
@@ -119,6 +123,7 @@
               v-model="previousDiscount"
               v-bind:loading="loading"
               v-show="discount != previousDiscount"
+              readonly
             ></v-text-field>
 
             <v-text-field
@@ -126,6 +131,7 @@
               v-model="previousRelatedStore"
               v-bind:loading="loading"
               v-show="relatedStore != previousRelatedStore"
+              readonly
             ></v-text-field>
 
             <v-text-field
@@ -133,6 +139,7 @@
               v-model="previousRelatedCategory"
               v-bind:loading="loading"
               v-show="relatedCategory != previousRelatedCategory"
+              readonly
             ></v-text-field>
 
           </v-form>
