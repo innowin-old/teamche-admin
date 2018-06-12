@@ -46,6 +46,8 @@
       v-bind:loading="loading"
     ></v-text-field>
 
+    <v-btn v-show="latitude != '' && longitude != ''" v-on:click="showPosition">Show Position</v-btn>
+
     <v-text-field
       label="Address"
       v-model="address"
@@ -115,6 +117,9 @@
       categories: []
     }),
     methods: {
+      showPosition () {
+        window.open('https://www.google.com/maps/place/' + this.latitude + ',' + this.longitude, '_blank');
+      },
       submit () {
         if (this.$refs.form.validate()) {
           // Native form submission is not yet supported
