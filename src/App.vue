@@ -195,6 +195,17 @@ export default {
         icon: 'list',
         title: 'Slides',
         path: '/slides'
+      },
+      {
+        icon: 'image',
+        title: 'Images',
+        path: '/images',
+        items: [
+          {
+            title: 'Confirmation',
+            path: '/images/create-request-confirmation'
+          }
+        ]
       }
       ],
       miniVariant: false,

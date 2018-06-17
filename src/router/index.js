@@ -37,6 +37,10 @@ import CommentsUpdateRequestConfirmation from '@/components/comments/UpdateReque
 import Slides from '@/components/slides/List'
 import SlideForm from '@/components/slides/Form'
 
+import Images from '@/components/images/List'
+import ImagesCreateConfirmation from '@/components/images/CreateConfirmation'
+import ImageForm from '@/components/images/Form'
+
 Vue.use(Router)
 
 export default new Router({
@@ -215,6 +219,26 @@ export default new Router({
       path: '/slides/update',
       name: 'Update Slide',
       component: SlideForm
+    },
+    {
+      path: '/images',
+      name: 'Images',
+      component: Images
+    },
+    {
+      path: '/images/create-request-confirmation',
+      name: 'Images Create Confirmation',
+      component: ImagesCreateConfirmation
+    },
+    {
+      path: '/images/create',
+      name: 'Create Image',
+      component: ImageForm
+    },
+    {
+      path: '/images/update',
+      name: 'Update Image',
+      component: ImageForm
     }
   ]
 })
