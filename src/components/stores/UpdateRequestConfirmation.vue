@@ -126,7 +126,7 @@
       },
       acceptUpdate: function(id, index) {
         var body = {
-          url: 'http://teamche.daneshboom.ir/stores/' + id + '/accept_update/',
+          url: 'http://teamche.daneshboom.ir/stores/' + id + '/accept/',
           token: this.$cookie.get('teamche_token'),
           method: 'post',
           result: 'acceptResult'
@@ -136,7 +136,7 @@
       },
       denyUpdate: function(id, index) {
         var body = {
-          url: 'http://teamche.daneshboom.ir/stores/' + id + '/deny_update/',
+          url: 'http://teamche.daneshboom.ir/stores/' + id + '/deny/',
           token: this.$cookie.get('teamche_token'),
           method: 'post',
           result: 'denyResult'
