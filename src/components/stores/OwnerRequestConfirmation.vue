@@ -35,7 +35,7 @@
             <v-btn v-else flat small color="error" v-on:click="activate(props.item.id)">Deactive</v-btn>
           </td>
           <td>
-            <v-btn flat icon color="orange" class="tools-button" v-on:click="navigate('/update-store?id=' + props.item.id)">
+            <v-btn flat icon color="orange" class="tools-button" v-on:click="navigate('/stores/update?id=' + props.item.id)">
               <v-icon>edit</v-icon>
             </v-btn>
             <v-btn flat icon color="red" dark class="tools-button" v-on:click="deleteRecord(props.item.id, props.index)">
