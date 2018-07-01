@@ -126,28 +126,20 @@
         this.$router.push(path)
       },
       activate: function(id) {
-        var data = {
-          active_flag: true
-        }
         var body = {
-          url: 'http://teamche.daneshboom.ir/products/' + id + '/',
+          url: 'http://teamche.daneshboom.ir/products/' + id + '/accept/',
           token: this.$cookie.get('teamche_token'),
           method: 'patch',
           result: 'activateResult',
-          data: data
         }
         this.$socket.emit('rest request', body)
       },
       deactivate: function(id) {
-        var data = {
-          active_flag: false
-        }
         var body = {
-          url: 'http://teamche.daneshboom.ir/products/' + id + '/',
+          url: 'http://teamche.daneshboom.ir/products/' + id + '/deny/',
           token: this.$cookie.get('teamche_token'),
-          method: 'patch',
+          method: 'post',
           result: 'deactivateResult',
-          data: data
         }
         this.$socket.emit('rest request', body)
       },
