@@ -129,7 +129,7 @@
         var body = {
           url: 'http://teamche.daneshboom.ir/products/' + id + '/accept/',
           token: this.$cookie.get('teamche_token'),
-          method: 'patch',
+          method: 'post',
           result: 'activateResult',
         }
         this.$socket.emit('rest request', body)
